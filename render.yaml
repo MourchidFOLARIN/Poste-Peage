@@ -8,8 +8,11 @@ services:
     region: frankfurt
     plan: free
 
-    # Build : installer les dépendances + générer Prisma + migrer la BDD
-    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy
+    # Build : installer les dépendances + générer Prisma Client
+    buildCommand: npm run build
+
+    # Sync de la base de données PostgreSQL avant le déploiement en direct
+    preDeployCommand: npx prisma db push --accept-data-loss
 
     # Démarrage de l'API Express
     startCommand: npm start
