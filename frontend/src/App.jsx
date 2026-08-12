@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import SidebarAdmin from './components/SidebarAdmin';
 
 // Pages Client
+import LandingPage from './pages/LandingPage';
 import ClientDashboard from './pages/client/ClientDashboard';
 import ClientLogin from './pages/client/ClientLogin';
 import ClientHistory from './pages/client/ClientHistory';
@@ -70,8 +71,9 @@ function MainLayout() {
       <Navbar />
       <main className="flex-1">
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<ClientLogin />} />
-          <Route path="/" element={<ProtectedClientRoute><ClientDashboard /></ProtectedClientRoute>} />
+          <Route path="/dashboard" element={<ProtectedClientRoute><ClientDashboard /></ProtectedClientRoute>} />
           <Route path="/recharge" element={<ProtectedClientRoute><ClientRecharge /></ProtectedClientRoute>} />
           <Route path="/history" element={<ProtectedClientRoute><ClientHistory /></ProtectedClientRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />

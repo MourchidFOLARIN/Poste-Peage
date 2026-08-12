@@ -19,14 +19,14 @@ export default function ClientLogin() {
     if (isRegistering) {
       const res = await registerUser(name, email, phone);
       if (res.success) {
-        navigate('/');
+        navigate('/dashboard');
       } else {
         setError(res.message);
       }
     } else {
       const res = await loginUser(email);
       if (res.success) {
-        navigate('/');
+        navigate('/dashboard');
       } else {
         setError(res.message);
       }
