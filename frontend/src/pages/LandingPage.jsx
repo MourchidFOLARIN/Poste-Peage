@@ -4,7 +4,7 @@ import {
   CreditCard, Zap, Shield, Radio, ArrowRight, CheckCircle,
   Smartphone, BarChart3, Lock, Cpu, Wifi, Clock,
   ChevronRight, Star, Globe, Activity, Users, Coins,
-  Menu, X
+  Menu, X, MapPin, Navigation, Compass, Sparkles
 } from 'lucide-react';
 
 // Compteur animé
@@ -39,63 +39,107 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Postes de péage réels au Bénin avec photos authentiques
+  const tollStations = [
+    {
+      id: 'ekpe',
+      name: 'Poste de Péage d\'Ekpé',
+      location: 'Route Cotonou - Sèmè Kpodji',
+      badge: 'Flux Élevé · 24/7',
+      status: 'Opérationnel',
+      image: 'https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg',
+      lanes: '6 Voies Automatiques',
+      tech: 'ESP32 + Lecteur RFID UHF'
+    },
+    {
+      id: 'houegbo',
+      name: 'Poste de Péage de Houègbo',
+      location: 'RNIE 2 (Cotonou - Bohicon)',
+      badge: 'Voies Léger Ouvertes',
+      status: 'Opérationnel',
+      image: 'https://www.kaweru.com/wp-content/uploads/2025/12/Peage-480x270.jpg',
+      lanes: '4 Voies mixtes & Rapides',
+      tech: 'Barrières Servomoteurs IoT'
+    },
+    {
+      id: 'diho',
+      name: 'Poste de Péage de Diho',
+      location: 'Axe Savè - Parakou',
+      badge: 'Infrastructures Modernes',
+      status: 'Nouveau',
+      image: 'https://globalarchiconsult.com/upload/images/projects/0633589001642937881.png',
+      lanes: '4 Voies Haute Fréquence',
+      tech: 'Capteurs Infrarouges & RFID'
+    },
+    {
+      id: 'cotonou-est',
+      name: 'Poste de Péage de Cotonou',
+      location: 'Boulevard de la Marina - Contournement Est',
+      badge: 'Interconnexion MoMo',
+      status: 'Haute Capacité',
+      image: 'https://lanouvelletribune.info/wp-content/uploads/2023/03/poste-peage.webp',
+      lanes: '8 Voies de franchissement',
+      tech: 'Synchro Cloud PostgreSQL'
+    }
+  ];
+
   const features = [
     {
       icon: Radio,
       color: 'from-cyan-500 to-blue-500',
       glow: 'shadow-cyan-500/20',
-      title: 'Lecture RFID Instantanée',
-      desc: 'Badge scanné en moins de 200ms par les bornes ESP32. Débit fluide sans arrêt complet du véhicule.'
+      title: 'Franchissement RFID Instantané',
+      desc: 'Badge scanné en moins de 200ms par les bornes ESP32. Ouverture fluide sans arrêt complet du véhicule.'
     },
     {
       icon: Zap,
       color: 'from-amber-400 to-orange-500',
       glow: 'shadow-amber-500/20',
-      title: 'Recharge Mobile Money',
-      desc: 'MTN MoMo, Moov Money et Celtis Cash. Crédit instantané sur votre badge RFID depuis votre téléphone.'
+      title: 'Recharge Mobile Money Bénin',
+      desc: 'Compatible MTN MoMo, Moov Money et Celtis Cash. Crédit instantané sur votre compte depuis votre téléphone.'
     },
     {
       icon: BarChart3,
       color: 'from-purple-500 to-indigo-500',
       glow: 'shadow-purple-500/20',
-      title: 'Dashboard Admin en Temps Réel',
-      desc: 'Recettes, flux de véhicules et anomalies affichés en direct via WebSocket. Zéro latence.'
+      title: 'Dashboard Admin Temps Réel',
+      desc: 'Recettes, flux de véhicules et anomalies affichés en direct via WebSockets. Zéro latence pour les opérateurs.'
     },
     {
       icon: Shield,
       color: 'from-emerald-500 to-teal-500',
       glow: 'shadow-emerald-500/20',
-      title: 'Blocage d\'Urgence Immédiat',
-      desc: 'Badge perdu ou volé ? Bloquez votre carte en 1 clic depuis l\'application mobile ou le portail web.'
+      title: 'Blocage d\'Urgence Anti-Vol',
+      desc: 'Badge perdu ou volé ? Bloquez votre carte RFID en 1 clic depuis votre espace client sécurisé.'
     },
     {
       icon: Smartphone,
       color: 'from-pink-500 to-rose-500',
       glow: 'shadow-pink-500/20',
-      title: 'Portail Client Mobile-First',
-      desc: 'Consultez votre solde, téléchargez vos reçus PDF et gérez votre compte depuis n\'importe quel appareil.'
+      title: 'Portail Client 100% Mobile',
+      desc: 'Suivez votre solde, consultez l\'historique des passages et téléchargez vos reçus PDF à tout moment.'
     },
     {
       icon: Activity,
       color: 'from-blue-500 to-violet-500',
       glow: 'shadow-blue-500/20',
-      title: 'Audit & Traçabilité Complète',
-      desc: 'Chaque passage est horodaté et archivé en base PostgreSQL. Export CSV disponible pour la comptabilité.'
+      title: 'Audit & Sécurité PostgreSQL',
+      desc: 'Horodatage infalsifiable des transactions et archivage sécurisé sur base de données distribuée.'
     },
   ];
 
   const steps = [
-    { number: '01', title: 'Inscrivez-vous', desc: 'Créez votre compte en 30 secondes avec votre email.', icon: Users },
-    { number: '02', title: 'Activez votre Badge', desc: 'Récupérez votre badge RFID auprès du guichet du péage.', icon: CreditCard },
-    { number: '03', title: 'Rechargez votre Solde', desc: 'Utilisez MTN MoMo, Moov Money ou Celtis Cash depuis votre téléphone.', icon: Coins },
-    { number: '04', title: 'Passez sans Attendre', desc: 'Approchez votre badge — la barrière s\'ouvre automatiquement en moins de 1 seconde.', icon: Zap },
+    { number: '01', title: 'Créer votre Compte', desc: 'Inscription rapide en 30 secondes sans paperasse.', icon: Users },
+    { number: '02', title: 'Lier votre Badge RFID', desc: 'Associez le code de votre carte à votre compte utilisateur.', icon: CreditCard },
+    { number: '03', title: 'Recharger votre Solde', desc: 'Effectuez une recharge sécurisée par MTN MoMo, Moov Money ou Celtis.', icon: Coins },
+    { number: '04', title: 'Passez le Péage', desc: 'La borne ESP32 détecte votre badge et lève la barrière en 1/5 de seconde.', icon: Zap },
   ];
 
   const stats = [
     { value: 500, suffix: ' FCFA', label: 'Tarif par passage', icon: Coins },
-    { value: 200, suffix: 'ms', label: 'Temps de traitement', icon: Clock },
-    { value: 99, suffix: '%', label: 'Disponibilité système', icon: Wifi },
-    { value: 24, suffix: '/7', label: 'Support & Monitoring', icon: Activity },
+    { value: 200, suffix: 'ms', label: 'Temps de lecture RFID', icon: Clock },
+    { value: 99, suffix: '%', label: 'Disponibilité du réseau', icon: Wifi },
+    { value: 24, suffix: '/7', label: 'Monitoring automatisé', icon: Activity },
   ];
 
   return (
@@ -117,6 +161,7 @@ export default function LandingPage() {
 
           {/* Nav Desktop */}
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300">
+            <a href="#reseau-peage" className="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><MapPin className="w-4 h-4 text-cyan-400" /> Postes du Bénin</a>
             <a href="#fonctionnalites" className="hover:text-white transition-colors">Fonctionnalités</a>
             <a href="#comment-ca-marche" className="hover:text-white transition-colors">Comment ça marche</a>
             <a href="#statistiques" className="hover:text-white transition-colors">Performances</a>
@@ -147,6 +192,7 @@ export default function LandingPage() {
         {/* Menu Mobile */}
         {menuOpen && (
           <div className="md:hidden bg-slate-900 border-b border-slate-800 p-4 space-y-3">
+            <a href="#reseau-peage" onClick={() => setMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white text-sm font-semibold transition-colors">Postes du Bénin</a>
             <a href="#fonctionnalites" onClick={() => setMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white text-sm font-semibold transition-colors">Fonctionnalités</a>
             <a href="#comment-ca-marche" onClick={() => setMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white text-sm font-semibold transition-colors">Comment ça marche</a>
             <Link to="/login" className="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm">Commencer maintenant</Link>
@@ -157,7 +203,7 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       {/* HERO SECTION                     */}
       {/* ════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 pt-20 pb-16 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-16 overflow-hidden">
 
         {/* Arrière-plan lumineux animé */}
         <div className="absolute inset-0 pointer-events-none">
@@ -166,93 +212,117 @@ export default function LandingPage() {
           <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '3s' }} />
 
           {/* Grille de fond subtile */}
-          <div className="absolute inset-0 opacity-[0.025]" style={{
+          <div className="absolute inset-0 opacity-[0.03]" style={{
             backgroundImage: 'linear-gradient(rgba(6,182,212,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.8) 1px, transparent 1px)',
             backgroundSize: '60px 60px'
           }} />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
-          {/* Badge d'annonce */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 text-sm font-bold shadow-lg shadow-cyan-500/10">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-            Système de Péage Électronique Intelligent — Bénin 🇧🇯
+          {/* COLONNE GAUCHE : Titres, CTA & Preuves */}
+          <div className="lg:col-span-7 text-center lg:text-left space-y-8">
+
+            {/* Badge d'annonce */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 text-sm font-bold shadow-lg shadow-cyan-500/10">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              Réseau National des Péages Électroniques — Bénin 🇧🇯
+            </div>
+
+            {/* Titre principal massif */}
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
+              Le Péage{' '}
+              <span className="text-gradient-cyan">Sans Contact</span>
+              <br />
+              <span className="text-slate-300">du Bénin,</span>{' '}
+              <span className="text-gradient-gold">100% Connecté</span>
+            </h1>
+
+            {/* Sous-titre */}
+            <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
+              Franchissez les péages d'Ekpé, Houègbo et Diho en moins d'une seconde avec votre badge RFID ESP32.
+              Rechargez votre solde par Mobile Money et suivez vos passages en temps réel.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              <Link
+                to="/login"
+                className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/25 transition-all transform hover:scale-[1.03]"
+              >
+                <Zap className="w-5 h-5 fill-current" />
+                Créer mon Compte Client
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+
+              <Link
+                to="/admin/login"
+                className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-bold text-base border border-slate-700 transition-all"
+              >
+                <Cpu className="w-5 h-5 text-purple-400" />
+                Accès Portail Admin
+              </Link>
+            </div>
+
+            {/* Preuves sociales */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4 text-xs text-slate-400 font-semibold">
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-emerald-400" /> Recharges MTN MoMo & Moov</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-cyan-400" /> Franchissement 200ms</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-purple-400" /> PostgreSQL & WebSockets</span>
+            </div>
           </div>
 
-          {/* Titre principal massif */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
-            Le Péage{' '}
-            <span className="text-gradient-cyan">Sans Contact</span>
-            <br />
-            <span className="text-slate-300">du Futur,</span>{' '}
-            <span className="text-gradient-gold">Aujourd'hui</span>
-          </h1>
+          {/* COLONNE DROITE : Image principale du Péage d'Ekpé (Cotonou) */}
+          <div className="lg:col-span-5 relative group">
+            {/* Effet halo néon de fond */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 rounded-3xl blur-2xl opacity-60 group-hover:opacity-90 transition duration-700" />
 
-          {/* Sous-titre */}
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
-            Passez les barrières de péage en moins d'une seconde avec votre badge RFID ESP32.
-            Rechargez depuis votre téléphone. Consultez vos passages en temps réel.
-          </p>
+            {/* Carte conteneur d'image principale */}
+            <div className="relative rounded-3xl overflow-hidden border border-cyan-500/40 shadow-2xl bg-slate-900/90 backdrop-blur-xl p-3">
+              <img
+                src="https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg"
+                alt="Poste de Péage d'Ekpé Cotonou - Bénin"
+                className="w-full h-[420px] sm:h-[480px] object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Link
-              to="/login"
-              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/25 transition-all transform hover:scale-[1.03]"
-            >
-              <Zap className="w-5 h-5 fill-current" />
-              Créer mon Compte Gratuit
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-
-            <Link
-              to="/admin/login"
-              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-bold text-base border border-slate-700 transition-all"
-            >
-              <Cpu className="w-5 h-5 text-purple-400" />
-              Accès Back-Office Admin
-            </Link>
-          </div>
-
-          {/* Preuves sociales */}
-          <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs text-slate-500 font-semibold">
-            {['✅ Aucune carte bancaire requise', '⚡ Connexion en 30 secondes', '🔒 Données sécurisées PostgreSQL', '📱 100% Mobile-friendly'].map((item) => (
-              <span key={item}>{item}</span>
-            ))}
-          </div>
-        </div>
-
-        {/* Carte RFID holographique flottante */}
-        <div className="absolute bottom-8 right-8 hidden xl:block animate-float opacity-80">
-          <div className="relative w-72 h-44 rounded-3xl hologram-card border border-cyan-500/30 shadow-2xl shadow-cyan-500/20 p-6 flex flex-col justify-between overflow-hidden">
-            <div className="absolute -top-8 -right-8 w-40 h-40 bg-cyan-400/20 rounded-full blur-2xl" />
-            <div className="flex items-center justify-between">
-              <div className="w-10 h-8 rounded-lg bg-gradient-to-tr from-amber-300 to-amber-500 flex flex-col justify-around p-1">
-                <div className="w-full h-0.5 bg-amber-800/40 rounded" />
-                <div className="w-2/3 h-0.5 bg-amber-800/40 rounded" />
+              {/* Tag Localisation en haut à gauche */}
+              <div className="absolute top-6 left-6 px-3.5 py-1.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 text-xs font-bold flex items-center gap-2 shadow-lg">
+                <MapPin className="w-4 h-4 text-cyan-400 animate-bounce" />
+                Poste de Péage d'Ekpé (Cotonou)
               </div>
-              <span className="text-[10px] font-mono font-bold text-cyan-300 tracking-widest">RFID ESP32</span>
-            </div>
-            <div>
-              <span className="text-2xl font-black text-white">12 500 <span className="text-sm text-cyan-400">FCFA</span></span>
-              <span className="block text-[10px] text-slate-400 font-mono mt-1">UID : A1B2C3D4</span>
+
+              {/* Overlay d'information en bas */}
+              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 shadow-2xl flex items-center justify-between">
+                <div>
+                  <span className="block text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest">
+                    BORNE INTELLIGENTE ESP32
+                  </span>
+                  <span className="text-sm font-black text-white">
+                    Système Automatisé en Service
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-black">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  ACTIF
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </section>
 
       {/* ════════════════════════════════ */}
       {/* STATS                            */}
       {/* ════════════════════════════════ */}
-      <section id="statistiques" className="py-16 px-4 border-y border-slate-800/60">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
+      <section id="statistiques" className="py-16 px-4 border-y border-slate-800/60 bg-slate-900/40">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((s) => {
             const Icon = s.icon;
             return (
-              <div key={s.label} className="text-center space-y-2">
-                <div className="w-12 h-12 mx-auto rounded-2xl bg-slate-800 flex items-center justify-center mb-3">
-                  <Icon className="w-6 h-6 text-cyan-400" />
+              <div key={s.label} className="text-center space-y-2 group">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-800/80 border border-cyan-500/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                  <Icon className="w-7 h-7 text-cyan-400" />
                 </div>
                 <div className="text-3xl sm:text-4xl font-black text-white">
                   <AnimatedCounter target={s.value} suffix={s.suffix} />
@@ -264,24 +334,101 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ═════════════════════════════════════════════════════════ */}
+      {/* SECTION EXCLUSIVE : RÉSEAU DES POSTES DE PÉAGE DU BÉNIN   */}
+      {/* ═════════════════════════════════════════════════════════ */}
+      <section id="reseau-peage" className="py-24 px-4 relative overflow-hidden bg-slate-950">
+        <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+
+          {/* En-tête de la section */}
+          <div className="text-center space-y-4 max-w-3xl mx-auto">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-black uppercase tracking-widest">
+              <Compass className="w-4 h-4 text-cyan-400" />
+              Infrastructures Routières du Bénin
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              Nos Postes de Péage{' '}
+              <span className="text-gradient-cyan">Interconnectés</span>
+            </h2>
+            <p className="text-slate-400 text-lg leading-relaxed">
+              Découvrez le réseau de bornes ESP32 déployées sur les grands axes routiers béninois. Un seul badge RFID vous donne accès à l'ensemble du réseau national.
+            </p>
+          </div>
+
+          {/* Grille des 4 Postes de Péage avec Photos Authentiques */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {tollStations.map((station) => (
+              <div
+                key={station.id}
+                className="group relative rounded-3xl overflow-hidden border border-slate-800 hover:border-cyan-500/40 bg-slate-900/60 hover:bg-slate-900 transition-all duration-500 shadow-xl flex flex-col justify-between"
+              >
+                {/* Conteneur Image */}
+                <div className="relative h-64 sm:h-72 overflow-hidden">
+                  <img
+                    src={station.image}
+                    alt={station.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+
+                  {/* Badge Statut & Nom */}
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                    <span className="px-3 py-1.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 text-xs font-extrabold flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                      {station.location}
+                    </span>
+                    <span className="px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-black">
+                      {station.status}
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-4 left-6 right-6">
+                    <h3 className="text-2xl font-black text-white">{station.name}</h3>
+                    <span className="text-xs text-cyan-400 font-bold">{station.badge}</span>
+                  </div>
+                </div>
+
+                {/* Détails techniques bas de carte */}
+                <div className="p-6 grid grid-cols-2 gap-4 border-t border-slate-800/80 bg-slate-900/80">
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider block">Capacité voies</span>
+                    <span className="text-xs font-extrabold text-slate-200 flex items-center gap-1.5">
+                      <Navigation className="w-3.5 h-3.5 text-blue-400" />
+                      {station.lanes}
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider block">Technologie Bornes</span>
+                    <span className="text-xs font-extrabold text-slate-200 flex items-center gap-1.5">
+                      <Cpu className="w-3.5 h-3.5 text-purple-400" />
+                      {station.tech}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
       {/* ════════════════════════════════ */}
       {/* FEATURES                         */}
       {/* ════════════════════════════════ */}
-      <section id="fonctionnalites" className="py-24 px-4">
+      <section id="fonctionnalites" className="py-24 px-4 bg-slate-950">
         <div className="max-w-7xl mx-auto space-y-16">
 
           {/* En-tête section */}
           <div className="text-center space-y-4 max-w-3xl mx-auto">
             <span className="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-black uppercase tracking-widest">
-              Fonctionnalités
+              Fonctionnalités Avancées
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
               Tout ce dont vous avez besoin pour un{' '}
-              <span className="text-gradient-purple">péage intelligent</span>
+              <span className="text-gradient-purple">péage moderne</span>
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed">
-              Une plateforme complète construite sur ESP32, Node.js, PostgreSQL et React — 
-              pensée pour les gestionnaires et les automobilistes béninois.
+              Une architecture robuste intégrant microcontrôleurs ESP32, backend Express, base PostgreSQL et frontend React responsive.
             </p>
           </div>
 
@@ -290,7 +437,7 @@ export default function LandingPage() {
             {features.map((f) => {
               const Icon = f.icon;
               return (
-                <div key={f.title} className="glass-panel p-6 rounded-3xl glass-card-hover group space-y-4">
+                <div key={f.title} className="glass-panel p-6 rounded-3xl glass-card-hover group space-y-4 border border-slate-800/80 hover:border-cyan-500/30">
                   <div className={`w-12 h-12 rounded-2xl bg-gradient-to-tr ${f.color} flex items-center justify-center shadow-xl ${f.glow}`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
@@ -308,18 +455,14 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       {/* HOW IT WORKS                     */}
       {/* ════════════════════════════════ */}
-      <section id="comment-ca-marche" className="py-24 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl" />
-        </div>
-
+      <section id="comment-ca-marche" className="py-24 px-4 relative overflow-hidden bg-slate-900/30 border-y border-slate-800/60">
         <div className="max-w-5xl mx-auto space-y-16 relative z-10">
           <div className="text-center space-y-4">
             <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-black uppercase tracking-widest">
               Comment ça marche
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              Passez au péage en{' '}
+              Franchissez le péage en{' '}
               <span className="text-gradient-cyan">4 étapes simples</span>
             </h2>
           </div>
@@ -329,12 +472,7 @@ export default function LandingPage() {
               const Icon = step.icon;
               return (
                 <div key={step.number} className="relative">
-                  {/* Ligne de connexion */}
-                  {idx < steps.length - 1 && (
-                    <div className="hidden lg:block absolute top-10 left-[calc(50%+2.5rem)] w-[calc(100%-5rem)] h-px bg-gradient-to-r from-slate-600 to-slate-700 z-0" />
-                  )}
-
-                  <div className="glass-panel p-6 rounded-3xl text-center space-y-4 relative z-10">
+                  <div className="glass-panel p-6 rounded-3xl text-center space-y-4 border border-slate-800">
                     <div className="relative mx-auto w-16 h-16">
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center">
                         <Icon className="w-7 h-7 text-cyan-400" />
@@ -358,26 +496,25 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       {/* CTA FINAL                        */}
       {/* ════════════════════════════════ */}
-      <section className="py-24 px-4">
+      <section className="py-24 px-4 bg-slate-950">
         <div className="max-w-4xl mx-auto">
-          <div className="glass-panel rounded-3xl p-10 sm:p-16 text-center relative overflow-hidden border border-cyan-500/15 space-y-8">
+          <div className="glass-panel rounded-3xl p-10 sm:p-16 text-center relative overflow-hidden border border-cyan-500/25 space-y-8 shadow-2xl">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10 space-y-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-sm font-bold">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                Système Opérationnel — Rejoignez-nous dès aujourd'hui
+                Réseau Connecté — Opérationnel sur le territoire national
               </div>
 
               <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                Prêt à moderniser{' '}
-                <span className="text-gradient-cyan">votre expérience péage</span> ?
+                Prêt à passer au{' '}
+                <span className="text-gradient-cyan">péage sans contact</span> ?
               </h2>
 
               <p className="text-slate-400 text-lg max-w-xl mx-auto leading-relaxed">
-                Créez votre compte en 30 secondes. Rechargez votre badge RFID.
-                Passez les barrières sans attendre.
+                Rejoignez les conducteurs qui économisent du temps chaque jour sur les péages du Bénin.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -393,7 +530,7 @@ export default function LandingPage() {
                   className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-base border border-slate-700 transition-all"
                 >
                   <Shield className="w-5 h-5 text-purple-400" />
-                  Espace Administrateur
+                  Portail Administrateur
                 </Link>
               </div>
             </div>
@@ -402,7 +539,7 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-slate-800/60 py-10 px-4">
+      <footer className="border-t border-slate-800/60 py-10 px-4 bg-slate-950">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center">
