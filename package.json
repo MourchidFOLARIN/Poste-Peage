@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "build": "prisma generate && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "prisma generate && npm install --prefix frontend --include=dev && npm run build --prefix frontend",
     "seed": "prisma db seed",
     "client:dev": "npm --prefix frontend run dev",
     "client:build": "npm --prefix frontend run build"
@@ -32,10 +32,10 @@
     "express": "^5.2.1",
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
+    "prisma": "^5.20.0",
     "socket.io": "^4.8.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14",
-    "prisma": "^5.20.0"
+    "nodemon": "^3.1.14"
   }
 }
