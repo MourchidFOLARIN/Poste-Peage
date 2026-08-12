@@ -51,8 +51,8 @@ app.use(errorHandler);
 // Servir le Frontend React (Fichiers statiques)
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-// Gérer les routes React (SPA) - Doit être tout à la fin !
-app.get('*', (req, res) => {
+// Gérer les routes React (SPA) - Compatible Express 5
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
