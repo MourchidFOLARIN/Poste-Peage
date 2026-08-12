@@ -1,0 +1,82 @@
+// Prisma Schema pour le système de péage électronique ESP32
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum CardStatus {
+  ACTIVE
+  BLOCKED
+}
+
+enum TollGateStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum TransactionStatus {
+  AUTHORIZED
+  REFUSED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  role      Role     @default(USER)
+  cards     Card[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Card {
+  id        String     @id @default(uuid())
+  uid       String     @unique
+  balance   Float      @default(0)
+  status    CardStatus @default(ACTIVE)
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("cards")
+}
+
+model TollGate {
+  id           String         @id @default(uuid())
+  name         String
+  location     String
+  status       TollGateStatus @default(ACTIVE)
+  transactions Transaction[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("toll_gates")
+}
+
+model Transaction {
+  id         String            @id @default(uuid())
+  cardUid    String
+  userName   String?
+  amount     Float
+  status     TransactionStatus
+  reason     String?
+  tollGateId String?
+  tollGate   TollGate?         @relation(fields: [tollGateId], references: [id])
+  createdAt  DateTime          @default(now())
+
+  @@map("transactions")
+}

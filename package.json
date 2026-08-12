@@ -1,0 +1,41 @@
+{
+  "name": "peage-backend",
+  "version": "1.0.0",
+  "description": "Backend API Node.js/Express pour le système de péage électronique ESP32",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "build": "prisma generate && prisma migrate deploy",
+    "seed": "prisma db seed",
+    "client:dev": "npm --prefix frontend run dev",
+    "client:build": "npm --prefix frontend run build"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "keywords": [
+    "esp32",
+    "rfid",
+    "express",
+    "postgresql",
+    "prisma",
+    "peage"
+  ],
+  "author": "Mourchid FOLARIN",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "socket.io": "^4.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prisma": "^5.20.0"
+  }
+}
