@@ -1,7 +1,8 @@
 // Prisma Schema pour le système de péage électronique ESP32
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {

@@ -1,5 +1,8 @@
 FROM node:20-alpine
 
+# Installer OpenSSL pour Prisma sur Alpine Linux
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copier les définitions de dépendances et le schéma Prisma
