@@ -1,23 +1,18 @@
 services:
   # ─────────────────────────────────────────
-  # 1. SERVICE BACKEND API (Node.js/Express)
+  # 1. SERVICE BACKEND API (Docker Node.js)
   # ─────────────────────────────────────────
   - type: web
     name: peage-backend
-    env: node
+    env: docker
     region: frankfurt
     plan: free
-
-    # Build : générer Prisma Client
-    buildCommand: npx prisma generate
-
-    # Démarrage de l'API Express
-    startCommand: npm start
+    dockerfilePath: ./Dockerfile
 
     # Variables d'environnement injectées ou configurées sur le Dashboard Render
     envVars:
       - key: DATABASE_URL
-        sync: false # Utilise l'URL de connexion de la base créee manuellement sur Render
+        sync: false # Utilise l'URL de connexion de la base créée manuellement sur Render
       - key: PORT
         value: 5000
       - key: NODE_ENV
@@ -41,4 +36,3 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://peage-backend.onrender.com
-
