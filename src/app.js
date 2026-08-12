@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -29,8 +30,8 @@ app.use(limiter);
 // Parsing du JSON
 app.use(express.json());
 
-// Route Healthcheck / Test
-app.get('/', (req, res) => {
+// Route Healthcheck / Test API
+app.get('/api/health', (req, res) => {
   res.json({
     status: 'success',
     message: 'API Péage ESP32 & PostgreSQL opérationnelle !'
@@ -46,5 +47,13 @@ app.get('/api/transactions', cardController.getTransactions);
 
 // Middleware d'erreur global
 app.use(errorHandler);
+
+// Servir le Frontend React (Fichiers statiques)
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Gérer les routes React (SPA) - Doit être tout à la fin !
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 module.exports = app;
