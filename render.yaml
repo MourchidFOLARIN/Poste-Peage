@@ -24,7 +24,6 @@ services:
   - type: web
     name: peage-frontend
     env: static
-    region: frankfurt
     plan: free
     buildCommand: cd frontend && npm install --include=dev && npm run build
     staticPublishPath: frontend/dist
