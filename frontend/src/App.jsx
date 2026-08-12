@@ -66,9 +66,11 @@ function MainLayout() {
     );
   }
 
+  const isLandingPage = location.pathname === '/';
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      <Navbar />
+      {!isLandingPage && <Navbar />}
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -79,9 +81,11 @@ function MainLayout() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
-        Systeme de Peage Electronique Intelligent ESP32 & PostgreSQL - Developpe pour Mourchid FOLARIN
-      </footer>
+      {!isLandingPage && (
+        <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+          Systeme de Peage Electronique Intelligent ESP32 & PostgreSQL - Developpe pour Mourchid FOLARIN
+        </footer>
+      )}
     </div>
   );
 }

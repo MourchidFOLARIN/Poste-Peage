@@ -34,9 +34,9 @@ export default function Navbar() {
         {user ? (
           <nav className="hidden md:flex items-center gap-1 bg-slate-800/60 p-1 rounded-xl border border-slate-700/50">
             <Link
-              to="/"
+              to="/dashboard"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                isActive('/') ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/20' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                isActive('/dashboard') ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/20' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
               }`}
             >
               <CreditCard className="w-4 h-4" />
@@ -116,10 +116,10 @@ export default function Navbar() {
       {user && mobileMenuOpen && (
         <div className="md:hidden bg-slate-900 border-b border-slate-800 p-4 space-y-2 animate-fadeIn">
           <Link
-            to="/"
+            to="/dashboard"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-              isActive('/') ? 'bg-cyan-500 text-slate-950' : 'text-slate-300 hover:bg-slate-800'
+              isActive('/dashboard') ? 'bg-cyan-500 text-slate-950' : 'text-slate-300 hover:bg-slate-800'
             }`}
           >
             <CreditCard className="w-5 h-5" />
