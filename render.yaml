@@ -17,12 +17,10 @@ services:
     # Démarrage de l'API Express
     startCommand: npm start
 
-    # Variables d'environnement injectées automatiquement
+    # Variables d'environnement injectées ou configurées sur le Dashboard Render
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: peage-postgres-db
-          property: connectionString
+        sync: false # Utilise l'URL de connexion de la base créee manuellement sur Render
       - key: PORT
         value: 5000
       - key: NODE_ENV
@@ -47,12 +45,3 @@ services:
       - key: VITE_API_URL
         value: https://peage-backend.onrender.com
 
-# ─────────────────────────────────────────────
-# 3. BASE DE DONNÉES PostgreSQL (Managée Render)
-# ─────────────────────────────────────────────
-databases:
-  - name: peage-postgres-db
-    databaseName: peage_db
-    user: peage_user
-    region: frankfurt
-    plan: free
