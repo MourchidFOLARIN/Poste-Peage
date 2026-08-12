@@ -8,8 +8,8 @@ services:
     region: frankfurt
     plan: free
 
-    # Build : installer les dépendances + générer Prisma Client
-    buildCommand: npm run build
+    # Build : générer uniquement Prisma Client (rapide et économe en RAM)
+    buildCommand: npx prisma generate
 
     # Sync de la base de données PostgreSQL avant le déploiement en direct
     preDeployCommand: npx prisma db push --accept-data-loss
