@@ -4,10 +4,14 @@ const app = require('./app');
 const prisma = require('./config/db');
 const { initSocket } = require('./config/socket');
 
+const adminController = require('./controllers/adminController');
+
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', async () => {
   console.log(`🚀 Serveur Péage ESP32 (PostgreSQL/Prisma) démarré sur http://0.0.0.0:${PORT}`);
+  // Peupler automatiquement la BDD si elle est vide
+  await adminController.autoSeedIfEmpty();
 });
 
 // Initialiser le serveur WebSockets Socket.io

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// URL de l'API REST Render ou Fallback Local
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// URL de l'API REST Render, Variable d'environnement ou Fallback Relatif
+const BASE_URL = import.meta.env.VITE_API_URL !== undefined 
+  ? import.meta.env.VITE_API_URL 
+  : (typeof window !== 'undefined' ? window.location.origin : '');
 
 const api = axios.create({
   baseURL: BASE_URL,

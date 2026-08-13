@@ -20,13 +20,27 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSeed = async () => {
+    try {
+      setLoading(true);
+      await api.post('/api/admin/seed');
+      await fetchStats();
+    } catch (err) {
+      console.error("Erreur de seeding :", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchStats();
 
     // Écoute des événements WebSocket en temps réel
     let socketInstance = null;
     import('socket.io-client').then(({ io }) => {
-      const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const BASE_URL = import.meta.env.VITE_API_URL !== undefined 
+        ? import.meta.env.VITE_API_URL 
+        : (typeof window !== 'undefined' ? window.location.origin : '');
       socketInstance = io(BASE_URL);
 
       socketInstance.on('scan_event', (scanData) => {
@@ -48,6 +62,26 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-6 sm:p-8 space-y-8 max-w-7xl mx-auto">
+
+      {/* Bannière si la base est vide */}
+      {stats && stats.totalUsersCount === 0 && (
+        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Zap className="w-6 h-6 text-amber-400 shrink-0" />
+            <div>
+              <span className="font-extrabold text-sm block">Base de données vide (0 utilisateur)</span>
+              <span className="text-xs text-amber-300/80">Cliquez ci-contre pour charger automatiquement les cartes RFID, utilisateurs et postes de péage de démonstration.</span>
+            </div>
+          </div>
+          <button
+            onClick={handleSeed}
+            disabled={loading}
+            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shrink-0 shadow-lg shadow-amber-500/20 transition-all"
+          >
+            Initialiser Données Démo 🚀
+          </button>
+        </div>
+      )}
 
       {/* En-tête du Back-Office Admin */}
       <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">

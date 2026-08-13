@@ -6,6 +6,7 @@ import {
   ChevronRight, Star, Globe, Activity, Users, Coins,
   Menu, X, MapPin, Navigation, Compass, Sparkles
 } from 'lucide-react';
+import BeninMap from '../components/BeninMap';
 
 // Compteur animé
 function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
@@ -218,7 +219,7 @@ export default function LandingPage() {
           }} />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 
           {/* COLONNE GAUCHE : Titres, CTA & Preuves */}
           <div className="lg:col-span-7 text-center lg:text-left space-y-8">
@@ -315,7 +316,7 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       {/* STATS                            */}
       {/* ════════════════════════════════ */}
-      <section id="statistiques" className="py-16 px-4 border-y border-slate-800/60 bg-slate-900/40">
+      <section id="statistiques" className="py-24 px-4 border-y border-slate-800/60 bg-slate-900/40">
         <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((s) => {
             const Icon = s.icon;
@@ -335,87 +336,16 @@ export default function LandingPage() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════ */}
-      {/* SECTION EXCLUSIVE : RÉSEAU DES POSTES DE PÉAGE DU BÉNIN   */}
+      {/* SECTION : CARTE INTERACTIVE DU RÉSEAU BÉNIN              */}
       {/* ═════════════════════════════════════════════════════════ */}
-      <section id="reseau-peage" className="py-24 px-4 relative overflow-hidden bg-slate-950">
-        <div className="max-w-7xl mx-auto space-y-16 relative z-10">
-
-          {/* En-tête de la section */}
-          <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-black uppercase tracking-widest">
-              <Compass className="w-4 h-4 text-cyan-400" />
-              Infrastructures Routières du Bénin
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-              Nos Postes de Péage{' '}
-              <span className="text-gradient-cyan">Interconnectés</span>
-            </h2>
-            <p className="text-slate-400 text-lg leading-relaxed">
-              Découvrez le réseau de bornes ESP32 déployées sur les grands axes routiers béninois. Un seul badge RFID vous donne accès à l'ensemble du réseau national.
-            </p>
-          </div>
-
-          {/* Grille des 4 Postes de Péage avec Photos Authentiques */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {tollStations.map((station) => (
-              <div
-                key={station.id}
-                className="group relative rounded-3xl overflow-hidden border border-slate-800 hover:border-cyan-500/40 bg-slate-900/60 hover:bg-slate-900 transition-all duration-500 shadow-xl flex flex-col justify-between"
-              >
-                {/* Conteneur Image */}
-                <div className="relative h-64 sm:h-72 overflow-hidden">
-                  <img
-                    src={station.image}
-                    alt={station.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-
-                  {/* Badge Statut & Nom */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                    <span className="px-3 py-1.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 text-xs font-extrabold flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                      {station.location}
-                    </span>
-                    <span className="px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-black">
-                      {station.status}
-                    </span>
-                  </div>
-
-                  <div className="absolute bottom-4 left-6 right-6">
-                    <h3 className="text-2xl font-black text-white">{station.name}</h3>
-                    <span className="text-xs text-cyan-400 font-bold">{station.badge}</span>
-                  </div>
-                </div>
-
-                {/* Détails techniques bas de carte */}
-                <div className="p-6 grid grid-cols-2 gap-4 border-t border-slate-800/80 bg-slate-900/80">
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider block">Capacité voies</span>
-                    <span className="text-xs font-extrabold text-slate-200 flex items-center gap-1.5">
-                      <Navigation className="w-3.5 h-3.5 text-blue-400" />
-                      {station.lanes}
-                    </span>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider block">Technologie Bornes</span>
-                    <span className="text-xs font-extrabold text-slate-200 flex items-center gap-1.5">
-                      <Cpu className="w-3.5 h-3.5 text-purple-400" />
-                      {station.tech}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
+      <section id="reseau-peage" className="bg-slate-950">
+        <BeninMap />
       </section>
 
       {/* ════════════════════════════════ */}
       {/* FEATURES                         */}
       {/* ════════════════════════════════ */}
-      <section id="fonctionnalites" className="py-24 px-4 bg-slate-950">
+      <section id="fonctionnalites" className="py-28 px-4 bg-slate-950">
         <div className="max-w-7xl mx-auto space-y-16">
 
           {/* En-tête section */}
@@ -433,7 +363,7 @@ export default function LandingPage() {
           </div>
 
           {/* Grille de features */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((f) => {
               const Icon = f.icon;
               return (
@@ -455,7 +385,7 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       {/* HOW IT WORKS                     */}
       {/* ════════════════════════════════ */}
-      <section id="comment-ca-marche" className="py-24 px-4 relative overflow-hidden bg-slate-900/30 border-y border-slate-800/60">
+      <section id="comment-ca-marche" className="py-28 px-4 relative overflow-hidden bg-slate-900/30 border-y border-slate-800/60">
         <div className="max-w-5xl mx-auto space-y-16 relative z-10">
           <div className="text-center space-y-4">
             <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-black uppercase tracking-widest">
@@ -496,7 +426,7 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       {/* CTA FINAL                        */}
       {/* ════════════════════════════════ */}
-      <section className="py-24 px-4 bg-slate-950">
+      <section className="py-28 px-4 bg-slate-950">
         <div className="max-w-4xl mx-auto">
           <div className="glass-panel rounded-3xl p-10 sm:p-16 text-center relative overflow-hidden border border-cyan-500/25 space-y-8 shadow-2xl">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -539,7 +469,7 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-slate-800/60 py-10 px-4 bg-slate-950">
+      <footer className="border-t border-slate-800/60 py-14 px-4 bg-slate-950">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center">
