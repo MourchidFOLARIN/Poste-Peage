@@ -5,16 +5,30 @@ RUN apk add --no-cache openssl
 
 WORKDIR /app
 
-# Copier les définitions de dépendances et le schéma Prisma
+# ─────────────────────────────────────────────────────────────────
+# ÉTAPE 1 : Installer les dépendances BACKEND et générer Prisma
+# ─────────────────────────────────────────────────────────────────
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Installer toutes les dépendances propres et générer le client Prisma
 RUN npm ci
 RUN npx prisma generate
 
-# Copier le reste du code backend
-COPY . .
+# ─────────────────────────────────────────────────────────────────
+# ÉTAPE 2 : Installer les dépendances FRONTEND et builder React
+# ─────────────────────────────────────────────────────────────────
+COPY frontend/package*.json ./frontend/
+
+RUN npm ci --prefix frontend --include=dev
+
+COPY frontend ./frontend/
+
+RUN npm run build --prefix frontend
+
+# ─────────────────────────────────────────────────────────────────
+# ÉTAPE 3 : Copier le reste du backend
+# ─────────────────────────────────────────────────────────────────
+COPY src ./src/
 
 # Définir l'environnement de production
 ENV NODE_ENV=production
@@ -22,5 +36,5 @@ ENV NODE_ENV=production
 # Exposer le port de l'application (5000 par défaut)
 EXPOSE 5000
 
-# Démarrer le serveur API Express
+# Démarrer le serveur API Express (sert aussi le frontend dist/)
 CMD ["npm", "start"]
