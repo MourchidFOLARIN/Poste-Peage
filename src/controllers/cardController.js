@@ -316,5 +316,28 @@ exports.getTransactions = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+/**
+ * Obtenir l'historique de toutes les recharges Mobile Money (Admin)
+ * GET /api/admin/recharges
+ */
+exports.getAllRecharges = async (req, res, next) => {
+  try {
+    const recharges = await prisma.recharge.findMany({
+      include: {
+        card: true,
+        user: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 100
+    });
+
+    return res.json({
+      status: 'success',
+      count: recharges.length,
+      data: recharges
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 

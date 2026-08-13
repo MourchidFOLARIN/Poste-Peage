@@ -6,5 +6,6 @@ const cardController = require('../controllers/cardController');
 // Router d'administration
 router.get('/stats', adminController.getStats);
 router.get('/users', cardController.getAllUsers);
+router.get('/recharges', cardController.getAllRecharges);
 
 module.exports = router;
