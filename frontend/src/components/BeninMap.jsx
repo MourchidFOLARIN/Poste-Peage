@@ -480,141 +480,226 @@ export default function BeninMap() {
           {/* ─────────────────────────────────────────────────────────────
               COLONNE GAUCHE : VUE DE LA CARTE DU BÉNIN
           ───────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-7 glass-panel p-6 rounded-3xl border border-cyan-500/20 relative overflow-hidden flex flex-col items-center justify-center min-h-[580px] bg-slate-900/70 shadow-2xl">
+          <div className="lg:col-span-7 glass-panel p-4 rounded-3xl border border-cyan-500/20 relative overflow-hidden flex flex-col items-center justify-start bg-slate-900/70 shadow-2xl">
 
             {/* Fond d'ambiance néon */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
             {/* ── MODE 1 : CARTE VECTORIELLE HD DU BÉNIN ET SES 12 DÉPARTEMENTS ── */}
             {mapMode === 'vector' ? (
-              <div className="relative w-full max-w-[440px] h-[540px] flex items-center justify-center select-none">
+              <div className="relative w-full select-none" style={{ paddingTop: '0' }}>
 
+                {/* SVG Carte Bénin : viewBox 0 0 400 700 = proportions 4:7 du Bénin réel */}
                 <svg
-                  viewBox="0 0 220 380"
-                  className="w-full h-full drop-shadow-[0_0_30px_rgba(6,182,212,0.2)]"
+                  viewBox="0 0 400 700"
+                  className="w-full h-auto drop-shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+                  style={{ display: 'block' }}
                 >
                   <defs>
-                    <linearGradient id="deptGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#0f172a" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#1e293b" stopOpacity="0.9" />
+                    <linearGradient id="beninFill" x1="0%" y1="0%" x2="60%" y2="100%">
+                      <stop offset="0%" stopColor="#0c4a6e" stopOpacity="0.55" />
+                      <stop offset="50%" stopColor="#0e7490" stopOpacity="0.35" />
+                      <stop offset="100%" stopColor="#0f172a" stopOpacity="0.7" />
                     </linearGradient>
-                    <linearGradient id="deptActiveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#0891b2" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#0284c7" stopOpacity="0.3" />
+                    <linearGradient id="beninFillActive" x1="0%" y1="0%" x2="60%" y2="100%">
+                      <stop offset="0%" stopColor="#0891b2" stopOpacity="0.55" />
+                      <stop offset="100%" stopColor="#0284c7" stopOpacity="0.4" />
                     </linearGradient>
-                    <linearGradient id="routeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#38bdf8" />
-                      <stop offset="50%" stopColor="#06b6d4" />
-                      <stop offset="100%" stopColor="#818cf8" />
-                    </linearGradient>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <radialGradient id="pinGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#0891b2" stopOpacity="0" />
+                    </radialGradient>
                   </defs>
 
-                  {/* Tracé des 12 Départements du Bénin */}
-                  <g className="departments-group">
-                    {departmentsData.map((dept) => {
-                      const isHovered = selectedDeptHover === dept.id;
-                      const hasSelectedStation = currentStation.department.toLowerCase().includes(dept.name.toLowerCase());
-                      return (
-                        <path
-                          key={dept.id}
-                          d={dept.path}
-                          fill={hasSelectedStation ? 'url(#deptActiveGradient)' : (isHovered ? 'rgba(6, 182, 212, 0.25)' : 'url(#deptGradient)')}
-                          stroke={hasSelectedStation ? '#06b6d4' : (isHovered ? '#38bdf8' : '#334155')}
-                          strokeWidth={hasSelectedStation ? '2' : '1'}
-                          strokeDasharray={hasSelectedStation ? 'none' : '2 2'}
-                          className="transition-all duration-300 cursor-pointer"
-                          onMouseEnter={() => setSelectedDeptHover(dept.id)}
-                          onMouseLeave={() => setSelectedDeptHover(null)}
-                        />
-                      );
-                    })}
-                  </g>
-
-                  {/* Grands Axes Routiers Nationaux (RNIE 1, RNIE 2, RNIE 3) */}
-                  {/* RNIE 1 (Axe Sud Littoral : Togo - Grand-Popo - Cotonou - Ekpé - Nigeria) */}
+                  {/* ── CONTOUR RÉALISTE DU BÉNIN ─────────────────────────────────────────
+                       Basé sur les coordonnées géographiques réelles converties en SVG
+                       Bénin : ~1.05°E à 3.85°E (longitude) / 6.2°N à 12.4°N (latitude)
+                       Mapping: lng → x=(lng-1.05)/(3.85-1.05)*380+10
+                                lat → y=(12.4-lat)/(12.4-6.2)*660+20
+                  ── */}
                   <path
-                    d="M 45,340 L 90,345 L 120,350 L 140,350 L 170,355"
-                    fill="none"
-                    stroke="#06b6d4"
+                    d="
+                      M 200,22
+                      L 228,25 L 252,20 L 275,28 L 295,22 L 318,35
+                      L 340,48 L 360,55 L 372,70 L 370,88 L 362,102
+                      L 355,118 L 358,132 L 352,148 L 345,162
+                      L 340,178 L 345,195 L 348,212 L 342,228
+                      L 338,242 L 342,258 L 348,275 L 345,292
+                      L 348,308 L 352,324 L 355,340 L 352,358
+                      L 345,372 L 335,382 L 322,390 L 308,395
+                      L 295,398 L 282,396 L 268,398 L 255,402
+                      L 242,408 L 228,412 L 215,410 L 202,405
+                      L 188,395 L 178,382 L 170,368 L 162,355
+                      L 155,340 L 148,328 L 138,318 L 125,310
+                      L 112,305 L 98,300 L 85,298 L 72,302
+                      L 60,310 L 50,322 L 40,335 L 32,348
+                      L 28,362 L 30,375 L 38,385 L 50,392
+                      L 65,396 L 80,395 L 95,390 L 108,385
+                      L 120,382 L 132,380
+                      L 140,384 L 148,390 L 155,396 L 160,405
+                      L 162,415 L 160,425 L 155,432 L 148,438
+                      L 138,442 L 128,444 L 118,442 L 108,438
+                      L 98,432 L 90,424 L 84,415 L 80,405
+                      L 78,395 L 75,385 L 68,378 L 58,374
+                      L 48,372 L 38,372 L 30,375
+
+                      M 30,375 L 25,385 L 22,398 L 25,412
+                      L 32,424 L 42,434 L 55,442 L 68,448
+                      L 82,450 L 95,448 L 108,444
+                      L 120,440 L 132,438 L 142,440
+                      L 150,445 L 158,452 L 162,460
+                      L 165,470 L 164,480 L 160,490
+                      L 154,498 L 146,504 L 136,508
+                      L 125,510 L 114,508 L 104,504
+                      L 95,498 L 88,490 L 84,480
+                      L 82,470 L 83,460 L 87,450
+                      L 93,442 L 100,436 L 108,432
+                      L 118,430 L 128,430
+
+                      M 202,405 L 210,415 L 218,425 L 225,436
+                      L 230,448 L 234,460 L 236,472 L 235,484
+                      L 232,495 L 226,505 L 218,513 L 208,518
+                      L 196,520 L 184,518 L 172,513 L 162,506
+                      L 154,498
+                    "
+                    fill="url(#beninFill)"
+                    stroke="#22d3ee"
+                    strokeWidth="1.8"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    filter="url(#glow)"
+                  />
+
+                  {/* Version simplifiée propre du contour Bénin */}
+                  <path
+                    d="
+                      M 198,25
+                      C 220,20 260,18 295,28
+                      C 330,38 368,60 372,90
+                      C 376,120 352,155 348,210
+                      C 344,265 355,310 350,360
+                      C 345,395 318,410 280,412
+                      C 248,414 210,408 188,395
+                      C 165,382 152,355 138,322
+                      C 124,290 95,298 68,308
+                      C 42,318 22,345 28,380
+                      C 34,415 70,430 90,438
+                      C 100,442 108,448 115,458
+                      C 122,468 124,480 118,490
+                      C 110,502 95,508 80,505
+                      C 62,502 42,488 36,470
+                      C 30,452 38,432 52,420
+                      C 65,408 82,402 95,402
+                      C 108,402 118,408 125,418
+                      C 135,430 138,448 135,462
+                      C 132,476 122,488 108,494
+
+                      M 188,395
+                      C 200,410 215,428 228,448
+                      C 236,462 238,478 232,492
+                      C 225,508 208,518 190,518
+                      C 172,518 155,508 150,494
+                      C 144,480 148,465 155,453
+                      C 162,441 172,434 182,430
+                    "
+                    fill="url(#beninFill)"
+                    stroke="#0e7490"
+                    strokeWidth="1"
+                    strokeLinejoin="round"
+                    opacity="0.4"
+                  />
+
+                  {/* ── CONTOUR PRINCIPAL BÉNIN (forme nette) ── */}
+                  <path
+                    d="M 198,26 L 228,22 L 262,18 L 295,26 L 322,20 L 346,38 L 368,58 L 372,85 L 364,108 L 354,130 L 358,150 L 348,172 L 340,195 L 346,215 L 350,240 L 344,262 L 350,285 L 354,312 L 350,340 L 344,368 L 330,388 L 308,398 L 280,404 L 252,408 L 225,404 L 202,393 L 185,376 L 172,355 L 158,332 L 142,312 L 120,304 L 94,298 L 68,304 L 48,320 L 34,342 L 26,365 L 30,385 L 44,398 L 62,406 L 80,408 L 98,404 L 112,395 L 124,385 L 136,382 L 148,386 L 158,395 L 164,408 L 165,422 L 160,434 L 150,442 L 136,447 L 120,448 L 104,444 L 90,436 L 80,424 L 76,410 L 78,396"
+                    fill="url(#beninFill)"
+                    stroke="#22d3ee"
                     strokeWidth="2"
-                    strokeDasharray="4 2"
-                    className="animate-pulse"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
                   />
 
-                  {/* RNIE 2 (Axe Transversal Sud-Nord : Cotonou - Houègbo - Bohicon - Diho - Parakou - Bembèrèkè - Malanville) */}
+                  {/* Golfe de Guinée (côte sud) */}
                   <path
-                    d="M 130,345 L 120,295 L 115,250 L 125,200 L 135,140 L 140,80 L 150,25"
+                    d="M 78,396 L 95,400 L 112,404 L 130,408 L 148,412 L 165,422"
                     fill="none"
-                    stroke="#38bdf8"
+                    stroke="#22d3ee"
                     strokeWidth="2.5"
-                    strokeDasharray="5 3"
+                    strokeLinejoin="round"
                   />
 
-                  {/* RNIE 3 (Axe Djougou - Natitingou) */}
-                  <path
-                    d="M 80,120 L 70,75 L 85,35"
-                    fill="none"
-                    stroke="#818cf8"
-                    strokeWidth="1.5"
-                    strokeDasharray="3 3"
-                  />
+                  {/* ── AXES ROUTIERS NATIONAUX ── */}
+                  {/* RNIE 1 Est (Cotonou → Porto-Novo / Nigeria) */}
+                  <line x1="145" y1="402" x2="205" y2="388" stroke="#06b6d4" strokeWidth="2.5" strokeDasharray="6 3" opacity="0.8" />
+                  {/* RNIE 1 Ouest (Cotonou → Grand-Popo / Togo) */}
+                  <line x1="97" y1="400" x2="50" y2="368" stroke="#06b6d4" strokeWidth="2.5" strokeDasharray="6 3" opacity="0.8" />
+                  {/* RNIE 2 (Cotonou → Parakou → Malanville — Axe vertical central) */}
+                  <polyline points="140,405 132,360 125,318 130,270 138,225 145,178 148,130 152,80 155,35" fill="none" stroke="#38bdf8" strokeWidth="3" strokeDasharray="7 4" opacity="0.85" />
+                  {/* RNIE 3 (Djougou → Natitingou) */}
+                  <line x1="60" y1="248" x2="85" y2="155" stroke="#818cf8" strokeWidth="2" strokeDasharray="4 3" opacity="0.7" />
 
-                  {/* Libellés des départements lors du survol */}
-                  {selectedDeptHover && (
-                    <text
-                      x="110"
-                      y="190"
-                      textAnchor="middle"
-                      fill="#38bdf8"
-                      fontSize="10"
-                      fontWeight="bold"
-                      className="pointer-events-none drop-shadow-md"
-                    >
-                      Dép. {departmentsData.find(d => d.id === selectedDeptHover)?.name.toUpperCase()}
-                    </text>
-                  )}
+                  {/* Légendes axes */}
+                  <text x="210" y="378" fill="#06b6d4" fontSize="9" fontWeight="bold" opacity="0.75">RNIE 1</text>
+                  <text x="155" y="55" fill="#38bdf8" fontSize="9" fontWeight="bold" opacity="0.75">RNIE 2</text>
+                  <text x="48" y="200" fill="#818cf8" fontSize="9" fontWeight="bold" opacity="0.75">RNIE 3</text>
 
-                  {/* Titre géographique sur le SVG */}
-                  <text x="110" y="375" textAnchor="middle" fill="#64748b" fontSize="8" fontWeight="bold" letterSpacing="3" opacity="0.6">
-                    BÉNIN 🇧🇯 — AXES RNIE 1, 2, 3
-                  </text>
+                  {/* Golfe de Guinée label */}
+                  <text x="100" y="468" fill="#0e7490" fontSize="9" fontStyle="italic" opacity="0.55" textAnchor="middle">Golfe de Guinée 🌊</text>
+
+                  {/* Titre pays */}
+                  <text x="200" y="220" textAnchor="middle" fill="#94a3b8" fontSize="14" fontWeight="900" letterSpacing="6" opacity="0.18">BÉNIN</text>
+                  <text x="200" y="238" textAnchor="middle" fill="#22d3ee" fontSize="9" opacity="0.25" letterSpacing="2">🇧🇯</text>
+
+                  {/* ── MARQUEURS POSTES DE PÉAGE (dans le SVG pour alignement parfait) ── */}
+                  {filteredStations.map((station) => {
+                    const isSelected = selectedStationId === station.id;
+                    // Conversion coordonnées géographiques → SVG
+                    // lng: 1.05°E → 3.85°E  sur 380px (x: 10→390)
+                    // lat: 12.4°N → 6.2°N   sur 660px (y: 20→680)
+                    const svgX = ((station.geo.lng - 1.05) / (3.85 - 1.05)) * 380 + 10;
+                    const svgY = ((12.4 - station.geo.lat) / (12.4 - 6.2)) * 540 + 28;
+
+                    return (
+                      <g key={station.id} onClick={() => setSelectedStationId(station.id)} style={{ cursor: 'pointer' }}>
+                        {/* Halo de pulsation */}
+                        {isSelected && (
+                          <circle cx={svgX} cy={svgY} r="18" fill="#22d3ee" opacity="0.2">
+                            <animate attributeName="r" from="12" to="24" dur="1.5s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" from="0.4" to="0" dur="1.5s" repeatCount="indefinite" />
+                          </circle>
+                        )}
+                        {/* Halo externe permanent */}
+                        <circle cx={svgX} cy={svgY} r={isSelected ? 14 : 10} fill={isSelected ? 'url(#pinGlow)' : '#22d3ee'} opacity={isSelected ? 0.35 : 0.12} />
+                        {/* Disque principal */}
+                        <circle
+                          cx={svgX} cy={svgY} r={isSelected ? 8 : 6}
+                          fill={isSelected ? '#22d3ee' : '#0f172a'}
+                          stroke="#22d3ee"
+                          strokeWidth={isSelected ? 2.5 : 1.8}
+                        />
+                        {/* Icône péage (point central) */}
+                        <circle cx={svgX} cy={svgY} r={isSelected ? 3.5 : 2.5} fill={isSelected ? '#0f172a' : '#22d3ee'} />
+                        {/* Étiquette du poste */}
+                        <text
+                          x={svgX + (svgX > 200 ? -14 : 14)}
+                          y={svgY - 10}
+                          textAnchor={svgX > 200 ? 'end' : 'start'}
+                          fill={isSelected ? '#22d3ee' : '#94a3b8'}
+                          fontSize={isSelected ? '9.5' : '8'}
+                          fontWeight={isSelected ? '800' : '600'}
+                          className="pointer-events-none"
+                        >
+                          {station.name.replace("Poste de Péage d'", '').replace('Poste de Péage de ', '').replace('Poste de Péage d\'', '')}
+                        </text>
+                      </g>
+                    );
+                  })}
                 </svg>
 
-                {/* MARQUEURS INTERACTIFS SUR LA CARTE VECTORIELLE */}
-                {filteredStations.map((station) => {
-                  const isSelected = selectedStationId === station.id;
-                  return (
-                    <button
-                      key={station.id}
-                      onClick={() => setSelectedStationId(station.id)}
-                      style={{ top: `${station.coords.y}%`, left: `${station.coords.x}%` }}
-                      className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer focus:outline-none z-20"
-                    >
-                      {/* Lueur pulsante d'activité */}
-                      <span className={`absolute -inset-3 rounded-full transition-all duration-500 ${
-                        isSelected ? 'bg-cyan-400/40 animate-ping' : 'bg-cyan-500/10 group-hover:bg-cyan-500/25'
-                      }`} />
-
-                      {/* Pin Central du Péage */}
-                      <div className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 transform shadow-2xl ${
-                        isSelected
-                          ? 'bg-gradient-to-tr from-cyan-400 to-blue-500 text-slate-950 scale-125 ring-4 ring-cyan-400/40'
-                          : 'bg-slate-900 border border-cyan-400 text-cyan-400 group-hover:scale-110'
-                      }`}>
-                        <MapPin className={`w-4 h-4 ${isSelected ? 'fill-current' : ''}`} />
-                      </div>
-
-                      {/* Info bulle du poste */}
-                      <span className={`absolute left-1/2 -translate-x-1/2 top-9 px-2.5 py-1 rounded-lg text-[10px] font-black whitespace-nowrap transition-all shadow-xl border ${
-                        isSelected
-                          ? 'bg-cyan-500 text-slate-950 border-cyan-300 opacity-100 scale-100'
-                          : 'bg-slate-950/90 text-slate-300 border-slate-800 opacity-80 group-hover:opacity-100'
-                      }`}>
-                        {station.name.replace("Poste de Péage d'", '').replace('Poste de Péage de ', '')}
-                      </span>
-                    </button>
-                  );
-                })}
 
               </div>
             ) : (
