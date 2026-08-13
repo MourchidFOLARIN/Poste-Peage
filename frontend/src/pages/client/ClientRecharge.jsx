@@ -7,6 +7,7 @@ export default function ClientRecharge() {
   const { cards, refreshUser } = useAuth();
   const primaryCard = cards && cards.length > 0 ? cards[0] : null;
 
+  const [cardUidInput, setCardUidInput] = useState(primaryCard ? primaryCard.uid : '');
   const [amount, setAmount] = useState('5000');
   const [provider, setProvider] = useState('MTN');
   const [phoneNumber, setPhoneNumber] = useState('97000000');
@@ -16,9 +17,16 @@ export default function ClientRecharge() {
 
   const quickAmounts = [1000, 2000, 5000, 10000, 25000];
 
+  const targetCardUid = primaryCard ? primaryCard.uid : cardUidInput;
+
   const handleRecharge = async (e) => {
     e.preventDefault();
-    if (!primaryCard) return;
+
+    if (!targetCardUid || targetCardUid.trim() === '') {
+      setStatus('error');
+      setMessage('Veuillez renseigner le code UID du badge RFID à recharger.');
+      return;
+    }
 
     const rechargeVal = parseFloat(amount);
     if (isNaN(rechargeVal) || rechargeVal <= 0) {
@@ -34,7 +42,7 @@ export default function ClientRecharge() {
       await new Promise(r => setTimeout(r, 1200));
 
       const res = await api.post('/api/cards/recharge', {
-        card_uid: primaryCard.uid,
+        card_uid: targetCardUid.trim(),
         amount: rechargeVal,
         operator: provider,
         phoneNumber: phoneNumber
@@ -47,7 +55,7 @@ export default function ClientRecharge() {
       }
     } catch (err) {
       setStatus('error');
-      setMessage(err.response?.data?.message || 'Erreur lors du traitement du paiement.');
+      setMessage(err.response?.data?.message || 'Erreur lors du traitement du paiement Mobile Money.');
     } finally {
       setLoading(false);
     }
@@ -74,28 +82,45 @@ export default function ClientRecharge() {
         </div>
       </div>
 
-      {primaryCard ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-          {/* Informations Solde */}
+          {/* Informations Solde ou Choix de la Carte */}
           <div className="glass-panel p-6 rounded-3xl space-y-4 border border-amber-500/15">
             <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-amber-400" />
-              Carte Sélectionnée
+              Badge RFID à Recharger
             </h2>
 
-            <div className="p-4 rounded-2xl bg-slate-800/60 border border-amber-500/15 space-y-2">
-              <span className="text-[10px] text-amber-400 font-mono uppercase tracking-wider block">UID Badge RFID</span>
-              <span className="text-lg font-mono font-black text-white tracking-widest">{primaryCard.uid}</span>
-              <div className="pt-2 border-t border-slate-700/50 flex justify-between items-center">
-                <span className="text-xs text-slate-400 font-medium">Solde actuel</span>
-                <span className="text-sm font-extrabold text-amber-400">{primaryCard.balance.toLocaleString()} FCFA</span>
+            {primaryCard ? (
+              <div className="p-4 rounded-2xl bg-slate-800/60 border border-amber-500/15 space-y-2">
+                <span className="text-[10px] text-amber-400 font-mono uppercase tracking-wider block">UID Badge RFID</span>
+                <span className="text-lg font-mono font-black text-white tracking-widest">{primaryCard.uid}</span>
+                <div className="pt-2 border-t border-slate-700/50 flex justify-between items-center">
+                  <span className="text-xs text-slate-400 font-medium">Solde actuel</span>
+                  <span className="text-sm font-extrabold text-amber-400">{primaryCard.balance.toLocaleString()} FCFA</span>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="p-4 rounded-2xl bg-slate-800/60 border border-amber-500/15 space-y-3">
+                <label className="text-[10px] text-amber-400 font-mono uppercase tracking-wider block">
+                  Code UID Badge RFID
+                </label>
+                <input
+                  type="text"
+                  value={cardUidInput}
+                  onChange={(e) => setCardUidInput(e.target.value)}
+                  placeholder="Ex: A1B2C3D4"
+                  className="w-full bg-slate-900 border border-amber-500/30 rounded-xl px-3 py-2 text-sm font-mono font-bold text-white uppercase focus:outline-none focus:border-amber-400"
+                />
+                <span className="text-[11px] text-slate-400 block leading-tight">
+                  Entrez l'UID de n'importe quel badge RFID à recharger.
+                </span>
+              </div>
+            )}
 
             <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs space-y-1">
               <span className="font-bold block">⚡ Recharge instantanée</span>
-              <p className="text-[11px] text-amber-300/80">Votre carte sera créditée immédiatement après la validation du paiement Mobile Money.</p>
+              <p className="text-[11px] text-amber-300/80">Le solde du badge sera crédité immédiatement après la validation du paiement Mobile Money.</p>
             </div>
           </div>
 
@@ -243,15 +268,6 @@ export default function ClientRecharge() {
           </div>
 
         </div>
-      ) : (
-        <div className="glass-panel p-8 rounded-3xl text-center space-y-4">
-          <div className="w-16 h-16 mx-auto rounded-3xl bg-slate-800 flex items-center justify-center">
-            <CreditCard className="w-8 h-8 text-slate-600" />
-          </div>
-          <p className="text-slate-300 font-bold">Aucune carte RFID associée</p>
-          <p className="text-slate-500 text-sm">Contactez l'administration du péage pour faire attribuer un badge RFID ESP32.</p>
-        </div>
-      )}
 
     </div>
   );
