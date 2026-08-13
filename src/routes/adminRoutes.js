@@ -5,7 +5,6 @@ const cardController = require('../controllers/cardController');
 
 // Router d'administration
 router.get('/stats', adminController.getStats);
-router.post('/seed', adminController.seedDatabase);
 router.get('/users', cardController.getAllUsers);
 
 module.exports = router;
