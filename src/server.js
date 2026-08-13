@@ -4,10 +4,21 @@ const app = require('./app');
 const prisma = require('./config/db');
 const { initSocket } = require('./config/socket');
 
+const { exec } = require('child_process');
+
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Serveur Péage ESP32 (PostgreSQL/Prisma) démarré sur http://0.0.0.0:${PORT}`);
+
+  // Synchronisation automatique de la BDD (Création de la table recharges) sans bloquer Render
+  exec('npx prisma db push --accept-data-loss', (error, stdout, stderr) => {
+    if (error) {
+      console.warn('⚠️ Synchro BDD (Prisma push warning) :', error.message);
+    } else {
+      console.log('✅ Schéma PostgreSQL synchronisé avec succès (table recharges active) !');
+    }
+  });
 });
 
 // Initialiser le serveur WebSockets Socket.io

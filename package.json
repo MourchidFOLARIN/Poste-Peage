@@ -4,7 +4,7 @@
   "description": "Backend API Node.js/Express pour le système de péage électronique ESP32",
   "main": "src/server.js",
   "scripts": {
-    "start": "npx prisma db push && node src/server.js",
+    "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "build": "prisma generate && npm install --prefix frontend --include=dev && npm run build --prefix frontend",
     "seed": "prisma db seed",
