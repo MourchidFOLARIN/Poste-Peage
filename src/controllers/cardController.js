@@ -72,7 +72,7 @@ exports.registerCard = async (req, res, next) => {
  */
 exports.rechargeCard = async (req, res, next) => {
   try {
-    const { card_uid, amount } = req.body;
+    const { card_uid, amount, operator = 'MTN', phoneNumber } = req.body;
 
     const rechargeAmount = parseFloat(amount);
 
@@ -96,30 +96,58 @@ exports.rechargeCard = async (req, res, next) => {
       });
     }
 
-    // Mise à jour du solde
-    const updatedCard = await prisma.card.update({
-      where: { id: card.id },
-      data: {
-        balance: { increment: rechargeAmount }
-      },
-      include: { user: true }
-    });
+    const validOperator = ['MTN', 'MOOV', 'CELTIS'].includes(operator?.toUpperCase()) 
+      ? operator.toUpperCase() 
+      : 'MTN';
 
+    const phoneToUse = phoneNumber || card.user.phone || 'Non renseigné';
+
+    // 1. Transaction atomique : Mise à jour du solde de la carte + Enregistrement de la Recharge en BDD
+    const [updatedCard, rechargeRecord] = await prisma.$transaction([
+      prisma.card.update({
+        where: { id: card.id },
+        data: {
+          balance: { increment: rechargeAmount }
+        },
+        include: { user: true }
+      }),
+      prisma.recharge.create({
+        data: {
+          cardId: card.id,
+          userId: card.userId,
+          amount: rechargeAmount,
+          operator: validOperator,
+          phoneNumber: phoneToUse,
+          status: 'SUCCESS',
+          newBalance: card.balance + rechargeAmount
+        }
+      })
+    ]);
+
+    // 2. Émission de l'événement WebSockets en temps réel pour le Dashboard Admin
     const { emitCardRecharged } = require('../config/socket');
     emitCardRecharged({
       card_uid: updatedCard.uid,
       user_name: updatedCard.user.name,
       new_balance: updatedCard.balance,
-      recharge_amount: rechargeAmount
+      recharge_amount: rechargeAmount,
+      operator: validOperator,
+      phone_number: phoneToUse,
+      recharge_id: rechargeRecord.id,
+      created_at: rechargeRecord.createdAt
     });
 
     return res.json({
       status: 'success',
-      message: `Solde rechargé de ${rechargeAmount} FCFA avec succès`,
+      message: `Solde rechargé de ${rechargeAmount.toLocaleString('fr-FR')} FCFA avec succès via ${validOperator} !`,
       data: {
         card_uid: updatedCard.uid,
         user_name: updatedCard.user.name,
-        new_balance: updatedCard.balance
+        new_balance: updatedCard.balance,
+        recharge_amount: rechargeAmount,
+        operator: validOperator,
+        phone_number: phoneToUse,
+        recharge_id: rechargeRecord.id
       }
     });
 

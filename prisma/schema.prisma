@@ -30,15 +30,28 @@ enum TransactionStatus {
   REFUSED
 }
 
+enum RechargeStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum MobileOperator {
+  MTN
+  MOOV
+  CELTIS
+}
+
 model User {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String    @unique
   phone     String?
-  role      Role     @default(USER)
+  role      Role      @default(USER)
   cards     Card[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  recharges Recharge[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("users")
 }
@@ -50,6 +63,7 @@ model Card {
   status    CardStatus @default(ACTIVE)
   userId    String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recharges Recharge[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
@@ -80,4 +94,20 @@ model Transaction {
   createdAt  DateTime          @default(now())
 
   @@map("transactions")
+}
+
+model Recharge {
+  id          String         @id @default(uuid())
+  cardId      String
+  card        Card           @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Float
+  operator    MobileOperator
+  phoneNumber String
+  status      RechargeStatus @default(PENDING)
+  newBalance  Float?
+  createdAt   DateTime       @default(now())
+
+  @@map("recharges")
 }

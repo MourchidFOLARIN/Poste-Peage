@@ -35,7 +35,9 @@ export default function ClientRecharge() {
 
       const res = await api.post('/api/cards/recharge', {
         card_uid: primaryCard.uid,
-        amount: rechargeVal
+        amount: rechargeVal,
+        operator: provider,
+        phoneNumber: phoneNumber
       });
 
       if (res.data?.status === 'success') {
@@ -121,24 +123,49 @@ export default function ClientRecharge() {
                 <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">
                   1. Choisissez le moyen de paiement
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {[
-                    { id: 'MTN', name: 'MTN MoMo', desc: 'MTN Mobile Money' },
-                    { id: 'Moov', name: 'Moov Money', desc: 'Moov Africa Bénin' },
-                    { id: 'Celtis', name: 'Celtis Cash', desc: 'Celtis Cash Bénin' },
+                    { 
+                      id: 'MTN', 
+                      name: 'MTN MoMo', 
+                      desc: 'MTN Mobile Money Bénin',
+                      color: 'bg-amber-400 text-slate-950 border-amber-300 shadow-xl shadow-amber-400/25 ring-2 ring-amber-400/50',
+                      badgeBg: 'bg-slate-950 text-amber-400'
+                    },
+                    { 
+                      id: 'Moov', 
+                      name: 'Moov Money', 
+                      desc: 'Moov Africa Bénin',
+                      color: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-blue-400 shadow-xl shadow-blue-500/25 ring-2 ring-blue-400/50',
+                      badgeBg: 'bg-slate-950 text-blue-300'
+                    },
+                    { 
+                      id: 'Celtis', 
+                      name: 'Celtis Cash', 
+                      desc: 'Celtis Cash Bénin',
+                      color: 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-emerald-400 shadow-xl shadow-emerald-500/25 ring-2 ring-emerald-400/50',
+                      badgeBg: 'bg-slate-950 text-emerald-300'
+                    },
                   ].map((p) => (
                     <button
                       key={p.id}
                       type="button"
                       onClick={() => setProvider(p.id)}
-                      className={`p-4 rounded-2xl border text-left transition-all transform hover:scale-[1.02] ${
+                      className={`p-4 rounded-2xl border text-left transition-all transform hover:scale-[1.02] relative overflow-hidden ${
                         provider === p.id
-                          ? 'border-amber-500 bg-amber-500/10 text-white shadow-xl shadow-amber-500/15'
-                          : 'border-slate-700 bg-slate-800/40 text-slate-400 hover:border-slate-600 hover:text-white'
+                          ? p.color
+                          : 'border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-white'
                       }`}
                     >
-                      <span className="block font-extrabold text-sm text-white">{p.name}</span>
-                      <span className="text-[10px] text-slate-400 font-medium">{p.desc}</span>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-black text-base">{p.name}</span>
+                        {provider === p.id && (
+                          <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${p.badgeBg}`}>
+                            SÉLECTIONNÉ
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] opacity-80 font-medium block">{p.desc}</span>
                     </button>
                   ))}
                 </div>

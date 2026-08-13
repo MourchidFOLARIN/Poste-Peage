@@ -34,7 +34,9 @@ export default function RechargeModal({ isOpen, onClose, cardUid, onSuccess }) {
 
       const res = await api.post('/api/cards/recharge', {
         card_uid: cardUid,
-        amount: rechargeVal
+        amount: rechargeVal,
+        operator: provider,
+        phoneNumber: phoneNumber
       });
 
       if (res.data?.status === 'success') {
