@@ -40,12 +40,12 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Postes de péage réels au Bénin avec photos authentiques
+  // Postes de péage réels au Bénin (SIRAT Bénin)
   const tollStations = [
     {
       id: 'ekpe',
-      name: 'Poste de Péage d\'Ekpé',
-      location: 'Route Cotonou - Sèmè Kpodji',
+      name: "Poste de Péage d'Ekpé",
+      location: 'Route Cotonou - Sèmè Kpodji - Porto-Novo (RNIE 1)',
       badge: 'Flux Élevé · 24/7',
       status: 'Opérationnel',
       image: 'https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg',
@@ -55,32 +55,72 @@ export default function LandingPage() {
     {
       id: 'houegbo',
       name: 'Poste de Péage de Houègbo',
-      location: 'RNIE 2 (Cotonou - Bohicon)',
-      badge: 'Voies Léger Ouvertes',
+      location: 'RNIE 2 (Cotonou - Allada - Bohicon)',
+      badge: 'Voies Rapides Ouvertes',
       status: 'Opérationnel',
       image: 'https://www.kaweru.com/wp-content/uploads/2025/12/Peage-480x270.jpg',
       lanes: '4 Voies mixtes & Rapides',
       tech: 'Barrières Servomoteurs IoT'
     },
     {
-      id: 'diho',
-      name: 'Poste de Péage de Diho',
-      location: 'Axe Savè - Parakou',
-      badge: 'Infrastructures Modernes',
-      status: 'Nouveau',
-      image: 'https://globalarchiconsult.com/upload/images/projects/0633589001642937881.png',
-      lanes: '4 Voies Haute Fréquence',
-      tech: 'Capteurs Infrarouges & RFID'
+      id: 'grandpopo',
+      name: "Poste de Péage d'Ahoho (Grand-Popo)",
+      location: 'RNIE 1 (Cotonou - Comè - Togo)',
+      badge: 'Transfrontalier · Togo',
+      status: 'Opérationnel',
+      image: 'https://lanouvelletribune.info/wp-content/uploads/2023/03/poste-peage.webp',
+      lanes: '4 Voies Transfrontalières',
+      tech: 'Caméras LPR & RFID FastLane'
     },
     {
-      id: 'cotonou-est',
-      name: 'Poste de Péage de Cotonou',
-      location: 'Boulevard de la Marina - Contournement Est',
-      badge: 'Interconnexion MoMo',
-      status: 'Haute Capacité',
+      id: 'diho',
+      name: 'Poste de Péage de Diho',
+      location: 'RNIE 2 (Axe Dassa - Savè)',
+      badge: 'Fret Inter-États',
+      status: 'Opérationnel',
+      image: 'https://globalarchiconsult.com/upload/images/projects/0633589001642937881.png',
+      lanes: '4 Voies Poids Lourds',
+      tech: 'Balance Pésage & ESP32'
+    },
+    {
+      id: 'parakou',
+      name: 'Poste de Péage de Sirarou (Parakou)',
+      location: 'RNIE 2 (Axe Parakou - N\'Dali)',
+      badge: 'Hub Grand Nord',
+      status: 'Connecté ESP32',
+      image: 'https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg',
+      lanes: '4 Voies Automatisées',
+      tech: 'Solaire & WebSockets IoT'
+    },
+    {
+      id: 'bembereke',
+      name: 'Poste de Péage de Bembèrèkè',
+      location: 'RNIE 2 (Corridor Parakou - Niger)',
+      badge: 'Transit Niger & Sahel',
+      status: 'Opérationnel',
+      image: 'https://www.kaweru.com/wp-content/uploads/2025/12/Peage-480x270.jpg',
+      lanes: '4 Voies Poids Lourds',
+      tech: 'Puces RFID UHF Longue Portée'
+    },
+    {
+      id: 'kpomasse',
+      name: 'Poste de Péage de Kpomassè',
+      location: 'Route des Pêches (Pahou - Ouidah)',
+      badge: 'Express Littoral',
+      status: 'Nouvelle Génération',
       image: 'https://lanouvelletribune.info/wp-content/uploads/2023/03/poste-peage.webp',
-      lanes: '8 Voies de franchissement',
-      tech: 'Synchro Cloud PostgreSQL'
+      lanes: '4 Voies Express',
+      tech: 'Paiement Sans Contact NFC'
+    },
+    {
+      id: 'djougou',
+      name: 'Poste de Péage de Djougou',
+      location: 'RNIE 3 (Axe Djougou - Natitingou)',
+      badge: 'Axe Ouest Togo',
+      status: 'Opérationnel',
+      image: 'https://globalarchiconsult.com/upload/images/projects/0633589001642937881.png',
+      lanes: '4 Voies Régionales',
+      tech: 'Détecteurs d\'essieux ESP32'
     }
   ];
 
