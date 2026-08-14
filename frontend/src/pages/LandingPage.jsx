@@ -493,7 +493,7 @@ export default function LandingPage() {
                   className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-10 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/25 transition-all transform hover:scale-[1.03]"
                 >
                   <Zap className="w-5 h-5 fill-current" />
-                  Créer mon Compte Gratuit
+                  Accéder a mon Compte
                 </Link>
                 <Link
                   to="/admin/login"
@@ -521,7 +521,7 @@ export default function LandingPage() {
           <div className="text-center text-xs text-slate-500">
             Système de Péage Électronique Intelligent ESP32 · PostgreSQL · React
             <br />
-            Développé par <span className="text-slate-300 font-bold">Mourchid FOLARIN</span> — Bénin 🇧🇯
+            Développé par <span className="text-slate-300 font-bold">TechLab</span> — Bénin 🇧🇯
           </div>
 
           <div className="flex items-center gap-4 text-xs text-slate-500">
