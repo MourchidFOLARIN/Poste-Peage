@@ -397,9 +397,7 @@ export default function LandingPage() {
               Tout ce dont vous avez besoin pour un{' '}
               <span className="text-gradient-purple">péage moderne</span>
             </h2>
-            <p className="text-slate-400 text-lg leading-relaxed">
-              Une architecture robuste intégrant microcontrôleurs ESP32, backend Express, base PostgreSQL et frontend React responsive.
-            </p>
+
           </div>
 
           {/* Grille de features */}
