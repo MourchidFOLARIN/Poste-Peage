@@ -292,7 +292,7 @@ export default function LandingPage() {
                 className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/25 transition-all transform hover:scale-[1.03]"
               >
                 <Zap className="w-5 h-5 fill-current" />
-                Créer mon Compte Client
+                Acceder a mon Compte
                 <ArrowRight className="w-5 h-5" />
               </Link>
 
