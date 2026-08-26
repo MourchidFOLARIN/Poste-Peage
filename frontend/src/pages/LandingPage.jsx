@@ -179,12 +179,6 @@ export default function LandingPage() {
         {/* Contenu textuel superposé sur l'image avec ombrages nets */}
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
 
-          {/* Badge d'annonce */}
-          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-cyan-400/40 text-cyan-300 text-xs sm:text-sm font-bold shadow-2xl">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
-            Réseau National des Péages Électroniques — Bénin 🇧🇯
-          </div>
-
           {/* Titre principal massif avec ombre portée pour contraster sur l'image */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.9)]">
             Le Péage{' '}
