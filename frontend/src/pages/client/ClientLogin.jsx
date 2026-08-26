@@ -26,7 +26,11 @@ export default function ClientLogin() {
     } else {
       const res = await loginUser(email);
       if (res.success) {
-        navigate('/dashboard');
+        if (email === 'admin@peage.bj' || email.startsWith('admin')) {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         setError(res.message);
       }

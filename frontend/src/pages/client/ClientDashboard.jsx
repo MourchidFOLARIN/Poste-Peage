@@ -50,6 +50,35 @@ export default function ClientDashboard() {
         </div>
       )}
 
+      {/* Bannière Détection Compte Administrateur */}
+      {user?.role === 'ADMIN' && (
+        <div className="p-5 rounded-3xl bg-gradient-to-r from-purple-900/40 via-indigo-900/30 to-slate-900/50 border border-purple-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl shadow-purple-950/30">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 flex-shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-white flex items-center gap-2">
+                Compte Gestionnaire Administrateur
+                <span className="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30 font-mono">
+                  ADMIN
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Vous êtes actuellement sur la vue usager. Rendez-vous sur le Back-Office pour superviser les passages ESP32, les cartes et les recettes.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            to="/admin/dashboard"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs shadow-lg shadow-purple-600/30 transition-all transform hover:scale-105 whitespace-nowrap"
+          >
+            Ouvrir le Back-Office Admin <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
+
       {/* En-tête de bienvenue moderne */}
       <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
