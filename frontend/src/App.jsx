@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/Navbar';
 import SidebarAdmin from './components/SidebarAdmin';
 
@@ -16,6 +17,10 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminCards from './pages/admin/AdminCards';
 import AdminTransactions from './pages/admin/AdminTransactions';
+import AdminRecharges from './pages/admin/AdminRecharges';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminTollGates from './pages/admin/AdminTollGates';
+import AdminSettings from './pages/admin/AdminSettings';
 
 // Route protégée Client
 const ProtectedClientRoute = ({ children }) => {
@@ -59,7 +64,11 @@ function MainLayout() {
           <Routes>
             <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
             <Route path="/admin/cards" element={<ProtectedAdminRoute><AdminCards /></ProtectedAdminRoute>} />
+            <Route path="/admin/tollgates" element={<ProtectedAdminRoute><AdminTollGates /></ProtectedAdminRoute>} />
             <Route path="/admin/transactions" element={<ProtectedAdminRoute><AdminTransactions /></ProtectedAdminRoute>} />
+            <Route path="/admin/recharges" element={<ProtectedAdminRoute><AdminRecharges /></ProtectedAdminRoute>} />
+            <Route path="/admin/users" element={<ProtectedAdminRoute><AdminUsers /></ProtectedAdminRoute>} />
+            <Route path="/admin/settings" element={<ProtectedAdminRoute><AdminSettings /></ProtectedAdminRoute>} />
           </Routes>
         </main>
       </div>
@@ -83,7 +92,7 @@ function MainLayout() {
       </main>
       {!isLandingPage && (
         <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
-          Systeme de Peage Electronique Intelligent ESP32 & PostgreSQL - Developpe pour Mourchid FOLARIN
+          Système de Péage Électronique Intelligent ESP32 &amp; PostgreSQL — Développé pour Mourchid FOLARIN
         </footer>
       )}
     </div>
@@ -93,9 +102,11 @@ function MainLayout() {
 export default function App() {
   return (
     <Router>
-      <AuthProvider>
-        <MainLayout />
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <MainLayout />
+        </AuthProvider>
+      </ToastProvider>
     </Router>
   );
 }

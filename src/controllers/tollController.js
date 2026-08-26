@@ -1,7 +1,6 @@
 const prisma = require('../config/db');
 const { emitScanEvent } = require('../config/socket');
-
-const TOLL_FEE = 500.0; // Tarif du péage en FCFA
+const { getTollFee } = require('../config/settings');
 
 /**
  * Endpoint critique : Scan de carte RFID par l'ESP32
@@ -11,6 +10,7 @@ const TOLL_FEE = 500.0; // Tarif du péage en FCFA
 exports.scanCard = async (req, res, next) => {
   try {
     const { card_uid, toll_gate_id } = req.body;
+    const TOLL_FEE = getTollFee();
 
     if (!card_uid) {
       return res.status(400).json({

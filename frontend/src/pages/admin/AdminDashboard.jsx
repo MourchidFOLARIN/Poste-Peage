@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Coins, CheckCircle, XCircle, CreditCard, Users, RefreshCw, Activity, ArrowUpRight, ShieldCheck, Radio, Cpu } from 'lucide-react';
+import { Coins, CheckCircle, XCircle, CreditCard, Users, RefreshCw, Activity, ArrowUpRight, ShieldCheck, Radio, Cpu, TrendingUp, DollarSign } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import { useToast } from '../../context/ToastContext';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
+  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hoveredBar, setHoveredBar] = useState(null);
+  const { addToast } = useToast();
 
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/api/admin/stats');
-      if (res.data?.status === 'success') {
-        setStats(res.data.data);
+      const [statsRes, chartRes] = await Promise.all([
+        api.get('/api/admin/stats'),
+        api.get('/api/admin/revenue-chart?days=7')
+      ]);
+
+      if (statsRes.data?.status === 'success') {
+        setStats(statsRes.data.data);
+      }
+      if (chartRes.data?.status === 'success') {
+        setChartData(chartRes.data.data);
       }
     } catch (err) {
       console.error("Erreur de récupération des stats admin :", err);
+      addToast('Erreur lors du chargement des statistiques', 'error');
     } finally {
       setLoading(false);
     }
@@ -48,6 +61,9 @@ export default function AdminDashboard() {
     };
   }, []);
 
+  // Calcul du max pour la hauteur relative du graphique
+  const maxRevenue = Math.max(...chartData.map(d => d.revenue), 1000);
+
   return (
     <div className="p-6 sm:p-8 space-y-8 max-w-7xl mx-auto">
 
@@ -69,9 +85,18 @@ export default function AdminDashboard() {
         </div>
 
         <div className="relative z-10 flex items-center gap-3">
+          <Link
+            to="/admin/settings"
+            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500/20 transition-all"
+            title="Modifier le tarif de passage"
+          >
+            <DollarSign className="w-3.5 h-3.5 text-amber-400" />
+            <span>Tarif : <strong className="font-mono text-white">{stats?.currentTollFee || 500} FCFA</strong></span>
+          </Link>
+
           <span className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-black shadow-lg shadow-emerald-500/10">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-            ESP32 CONNECTÉ
+            ESP32 EN DIRECT
           </span>
 
           <button
@@ -166,6 +191,70 @@ export default function AdminDashboard() {
           <div className="mt-3 text-[11px] text-slate-400 font-medium">Comptes usagers enregistrés</div>
         </div>
 
+      </div>
+
+      {/* GRAPHIQUE DES REVENUS DES 7 DERNIERS JOURS */}
+      <div className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-black text-white flex items-center gap-2 tracking-tight">
+              <TrendingUp className="w-5 h-5 text-emerald-400" />
+              Évolution des Recettes (7 Derniers Jours)
+            </h2>
+            <p className="text-xs text-slate-400">Total des encaissements journaliers réalisés sur l'ensemble des bornes</p>
+          </div>
+          <div className="text-xs font-mono font-bold text-emerald-300 bg-emerald-500/10 px-3.5 py-1.5 rounded-full border border-emerald-500/20 self-start sm:self-auto">
+            Total 7J : {chartData.reduce((acc, curr) => acc + curr.revenue, 0).toLocaleString('fr-FR')} FCFA
+          </div>
+        </div>
+
+        {/* Graphique à barres SVG personnalisé et responsive */}
+        <div className="pt-6">
+          <div className="h-48 flex items-end justify-between gap-2 sm:gap-4 px-2 border-b border-slate-800 pb-2">
+            {chartData.map((item, index) => {
+              const heightPercent = maxRevenue > 0 ? Math.max((item.revenue / maxRevenue) * 100, 4) : 4;
+              const dateObj = new Date(item.date);
+              const dayLabel = dateObj.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' });
+              const isToday = index === chartData.length - 1;
+
+              return (
+                <div
+                  key={item.date}
+                  className="flex-1 flex flex-col items-center h-full justify-end group relative cursor-pointer"
+                  onMouseEnter={() => setHoveredBar(item)}
+                  onMouseLeave={() => setHoveredBar(null)}
+                >
+                  {/* Tooltip flottant au hover */}
+                  {hoveredBar?.date === item.date && (
+                    <div className="absolute -top-14 z-20 bg-slate-900 border border-emerald-500/40 px-3 py-1.5 rounded-xl shadow-xl text-center pointer-events-none whitespace-nowrap animate-float">
+                      <div className="text-xs font-black text-emerald-400 font-mono">
+                        {item.revenue.toLocaleString('fr-FR')} FCFA
+                      </div>
+                      <div className="text-[10px] text-slate-400">
+                        {item.count} passage{item.count > 1 ? 's' : ''}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Barre graphique */}
+                  <div
+                    style={{ height: `${heightPercent}%` }}
+                    className={`w-full max-w-[48px] rounded-t-xl transition-all duration-500 group-hover:scale-105 ${
+                      isToday
+                        ? 'bg-gradient-to-t from-emerald-600 via-teal-500 to-cyan-400 shadow-lg shadow-emerald-500/25'
+                        : 'bg-gradient-to-t from-purple-800/80 via-purple-600 to-indigo-500 group-hover:from-emerald-600 group-hover:to-teal-400'
+                    }`}
+                  />
+
+                  {/* Label Date */}
+                  <span className={`text-[10px] sm:text-xs font-semibold mt-2 ${isToday ? 'text-emerald-400 font-bold' : 'text-slate-400'}`}>
+                    {dayLabel}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* FLUX EN DIRECT DES SCANS ESP32 */}

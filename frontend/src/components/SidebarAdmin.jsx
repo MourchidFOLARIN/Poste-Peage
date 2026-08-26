@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CreditCard, ArrowLeftRight, LogOut, ShieldAlert, Cpu, Menu, X } from 'lucide-react';
+import { LayoutDashboard, CreditCard, ArrowLeftRight, Smartphone, Users, LogOut, ShieldAlert, Cpu, Menu, X, Shield, Sliders } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function SidebarAdmin() {
@@ -15,9 +15,13 @@ export default function SidebarAdmin() {
   };
 
   const menuItems = [
-    { label: 'Vue d\'ensemble (Analytics)', path: '/admin/dashboard', icon: LayoutDashboard },
+    { label: "Vue d'ensemble (Analytics)", path: '/admin/dashboard', icon: LayoutDashboard },
     { label: 'Cartes & Usagers (CRUD)', path: '/admin/cards', icon: CreditCard },
+    { label: 'Postes de Péage (Bornes)', path: '/admin/tollgates', icon: Shield },
     { label: 'Historique des Scans', path: '/admin/transactions', icon: ArrowLeftRight },
+    { label: 'Recharges Mobile Money', path: '/admin/recharges', icon: Smartphone },
+    { label: 'Utilisateurs', path: '/admin/users', icon: Users },
+    { label: 'Paramètres & Tarifs', path: '/admin/settings', icon: Sliders },
   ];
 
   return (
@@ -42,13 +46,13 @@ export default function SidebarAdmin() {
         </button>
       </div>
 
-      {/* Sidebar Desktop (md:flex) + Drawer Mobile (conditional overlay) */}
+      {/* Sidebar Desktop (md:flex) + Drawer Mobile */}
       <aside
         className={`fixed md:sticky top-0 left-0 z-50 md:z-auto w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between h-screen transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
-        <div>
+        <div className="overflow-y-auto">
           {/* En-tête Logo Admin */}
           <div className="p-6 border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-3">

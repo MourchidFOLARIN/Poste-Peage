@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { CreditCard, Search, Plus, Lock, Unlock, Zap, UserPlus, Filter, CheckCircle, AlertCircle, RefreshCw, X } from 'lucide-react';
+import { CreditCard, Search, Plus, Lock, Unlock, Zap, UserPlus, Filter, CheckCircle, AlertCircle, RefreshCw, X, Trash2, AlertTriangle } from 'lucide-react';
 import api from '../../services/api';
+import { useToast } from '../../context/ToastContext';
 
 export default function AdminCards() {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const { addToast } = useToast();
 
   // Modal d'attribution de carte
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -22,6 +24,11 @@ export default function AdminCards() {
   // Modal de recharge manuelle admin
   const [selectedCardForRecharge, setSelectedCardForRecharge] = useState(null);
   const [rechargeAmount, setRechargeAmount] = useState('2000');
+  const [recharging, setRecharging] = useState(false);
+
+  // Modal suppression de carte
+  const [cardToDelete, setCardToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchCards = async () => {
     try {
@@ -35,7 +42,8 @@ export default function AdminCards() {
         setCards(res.data.data);
       }
     } catch (err) {
-      console.error("Erreur de chargement des cartes :", err);
+      console.error('Erreur de chargement des cartes :', err);
+      addToast('Erreur lors du chargement des cartes', 'error');
     } finally {
       setLoading(false);
     }
@@ -51,10 +59,11 @@ export default function AdminCards() {
     try {
       const res = await api.patch(`/api/cards/${card.uid}/status`, { status: nextStatus });
       if (res.data?.status === 'success') {
+        addToast(`Carte ${card.uid} ${nextStatus === 'ACTIVE' ? 'débloquée' : 'bloquée'}`, 'success');
         fetchCards();
       }
     } catch (err) {
-      alert("Erreur lors de la modification du statut de la carte");
+      addToast('Erreur lors de la modification du statut', 'error');
     }
   };
 
@@ -75,19 +84,17 @@ export default function AdminCards() {
       });
 
       if (res.data?.status === 'success') {
-        setFormSuccess('Carte RFID enregistrée et liée avec succès !');
-        setTimeout(() => {
-          setIsCreateOpen(false);
-          setNewCardUid('');
-          setUserName('');
-          setUserEmail('');
-          setUserPhone('');
-          setFormSuccess('');
-          fetchCards();
-        }, 1500);
+        addToast(`Carte ${newCardUid} attribuée avec succès !`, 'success');
+        setIsCreateOpen(false);
+        setNewCardUid('');
+        setUserName('');
+        setUserEmail('');
+        setUserPhone('');
+        fetchCards();
       }
     } catch (err) {
       setFormError(err.response?.data?.message || "Erreur lors de l'enregistrement de la carte");
+      addToast(err.response?.data?.message || 'Erreur enregistrement carte', 'error');
     } finally {
       setSubmitting(false);
     }
@@ -99,23 +106,44 @@ export default function AdminCards() {
     if (!selectedCardForRecharge) return;
 
     try {
+      setRecharging(true);
       const res = await api.post('/api/cards/recharge', {
         card_uid: selectedCardForRecharge.uid,
         amount: parseFloat(rechargeAmount)
       });
 
       if (res.data?.status === 'success') {
+        addToast(`Carte rechargée de ${parseFloat(rechargeAmount).toLocaleString('fr-FR')} FCFA`, 'success');
         setSelectedCardForRecharge(null);
         fetchCards();
       }
     } catch (err) {
-      alert("Erreur de recharge manuelle");
+      addToast('Erreur de recharge manuelle', 'error');
+    } finally {
+      setRecharging(false);
+    }
+  };
+
+  // Supprimer une carte RFID
+  const handleDeleteCard = async () => {
+    if (!cardToDelete) return;
+    try {
+      setDeleting(true);
+      const res = await api.delete(`/api/cards/${cardToDelete.uid}`);
+      if (res.data?.status === 'success') {
+        addToast(res.data.message || `Carte ${cardToDelete.uid} supprimée`, 'success');
+        setCardToDelete(null);
+        fetchCards();
+      }
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Erreur lors de la suppression de la carte', 'error');
+    } finally {
+      setDeleting(false);
     }
   };
 
   return (
     <div className="p-6 sm:p-8 space-y-8 max-w-7xl mx-auto">
-
       {/* En-tête Page */}
       <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -126,7 +154,7 @@ export default function AdminCards() {
             Gestion des Cartes &amp; <span className="text-gradient-purple">Clients (CRUD)</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Attribution des UIDs ESP32, recherche et blocage/déblocage en 1 clic
+            Attribution des UIDs ESP32, recherche, recharge manuelle, blocage et suppression de cartes.
           </p>
         </div>
 
@@ -141,7 +169,6 @@ export default function AdminCards() {
 
       {/* Barre de recherche et Filtres */}
       <div className="glass-panel p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        
         {/* Input Recherche */}
         <div className="relative w-full sm:w-96">
           <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -197,7 +224,7 @@ export default function AdminCards() {
                   <th className="py-3.5 px-4">Contact (Email / Tél)</th>
                   <th className="py-3.5 px-4 text-right">Solde Actuel</th>
                   <th className="py-3.5 px-4 text-center">Statut</th>
-                  <th className="py-3.5 px-4 text-right">Actions Rapides</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/50 text-slate-300">
@@ -207,7 +234,7 @@ export default function AdminCards() {
                       {c.uid}
                     </td>
                     <td className="py-4 px-4 font-bold text-white">
-                      {c.user?.name || "Sans Nom"}
+                      {c.user?.name || 'Sans Nom'}
                     </td>
                     <td className="py-4 px-4">
                       <span className="block text-slate-200">{c.user?.email}</span>
@@ -217,37 +244,56 @@ export default function AdminCards() {
                       {c.balance.toLocaleString('fr-FR')} FCFA
                     </td>
                     <td className="py-4 px-4 text-center">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold ${
-                        c.status === 'ACTIVE'
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                          : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                      }`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-[10px] font-bold ${
+                          c.status === 'ACTIVE'
+                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                        }`}
+                      >
                         {c.status === 'ACTIVE' ? 'Active' : 'Bloquée'}
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-right space-x-2">
-                      {/* Bouton 1-Click Bloquer/Débloquer */}
+                    <td className="py-4 px-4 text-right space-x-1.5">
+                      {/* Bouton Bloquer/Débloquer */}
                       <button
                         onClick={() => handleToggleStatus(c)}
-                        className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all ${
+                        className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all ${
                           c.status === 'ACTIVE'
                             ? 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20'
                             : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
                         }`}
+                        title={c.status === 'ACTIVE' ? 'Bloquer la carte' : 'Débloquer la carte'}
                       >
                         {c.status === 'ACTIVE' ? (
-                          <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> Bloquer</span>
+                          <span className="flex items-center gap-1">
+                            <Lock className="w-3 h-3" /> Bloquer
+                          </span>
                         ) : (
-                          <span className="flex items-center gap-1"><Unlock className="w-3 h-3" /> Débloquer</span>
+                          <span className="flex items-center gap-1">
+                            <Unlock className="w-3 h-3" /> Débloquer
+                          </span>
                         )}
                       </button>
 
                       {/* Recharge manuelle admin */}
                       <button
                         onClick={() => setSelectedCardForRecharge(c)}
-                        className="px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 text-[11px] font-bold transition-all"
+                        className="px-2.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 text-[11px] font-bold transition-all"
+                        title="Recharge manuelle"
                       >
-                        <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Recharger</span>
+                        <span className="flex items-center gap-1">
+                          <Zap className="w-3 h-3" /> Recharger
+                        </span>
+                      </button>
+
+                      {/* Supprimer carte */}
+                      <button
+                        onClick={() => setCardToDelete(c)}
+                        className="p-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-colors inline-flex items-center"
+                        title="Supprimer la carte"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </td>
                   </tr>
@@ -281,11 +327,6 @@ export default function AdminCards() {
             {formError && (
               <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
                 {formError}
-              </div>
-            )}
-            {formSuccess && (
-              <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
-                {formSuccess}
               </div>
             )}
 
@@ -351,9 +392,9 @@ export default function AdminCards() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all"
+                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all disabled:opacity-50"
               >
-                {submitting ? "Enregistrement..." : "Valider l'Attribution"}
+                {submitting ? 'Enregistrement...' : "Valider l'Attribution"}
               </button>
             </form>
           </div>
@@ -394,15 +435,47 @@ export default function AdminCards() {
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition-all"
+                disabled={recharging}
+                className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition-all disabled:opacity-50"
               >
-                Créditer la Carte
+                {recharging ? 'Recharge...' : 'Créditer la Carte'}
               </button>
             </form>
           </div>
         </div>
       )}
 
+      {/* MODAL CONFIRMATION SUPPRESSION CARTE */}
+      {cardToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative text-slate-100">
+            <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mb-4">
+              <AlertTriangle className="w-6 h-6" />
+            </div>
+
+            <h3 className="text-base font-bold text-white mb-1">Supprimer cette carte ?</h3>
+            <p className="text-xs text-slate-400 mb-6">
+              Êtes-vous sûr de vouloir supprimer la carte RFID <strong className="font-mono text-purple-400">{cardToDelete.uid}</strong> liée à <strong>{cardToDelete.user?.name}</strong> ? Son historique de recharge sera effacé.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setCardToDelete(null)}
+                className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleDeleteCard}
+                disabled={deleting}
+                className="flex-1 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-colors disabled:opacity-50"
+              >
+                {deleting ? 'Suppression...' : 'Supprimer'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

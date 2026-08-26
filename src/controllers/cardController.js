@@ -96,13 +96,13 @@ exports.rechargeCard = async (req, res, next) => {
       });
     }
 
-    const validOperator = ['MTN', 'MOOV', 'CELTIS'].includes(operator?.toUpperCase()) 
-      ? operator.toUpperCase() 
+    const validOperator = ['MTN', 'MOOV', 'CELTIS'].includes(operator?.toUpperCase())
+      ? operator.toUpperCase()
       : 'MTN';
 
     const phoneToUse = phoneNumber || card.user.phone || 'Non renseigné';
 
-    // 1. Transaction atomique : Mise à jour du solde de la carte + Enregistrement de la Recharge en BDD
+    // 1. Transaction atomique : Mise à jour du solde + Enregistrement Recharge
     const [updatedCard, rechargeRecord] = await prisma.$transaction([
       prisma.card.update({
         where: { id: card.id },
@@ -124,7 +124,7 @@ exports.rechargeCard = async (req, res, next) => {
       })
     ]);
 
-    // 2. Émission de l'événement WebSockets en temps réel pour le Dashboard Admin
+    // 2. Émission WebSocket temps réel
     const { emitCardRecharged } = require('../config/socket');
     emitCardRecharged({
       card_uid: updatedCard.uid,
@@ -267,8 +267,39 @@ exports.updateCardStatus = async (req, res, next) => {
 };
 
 /**
+ * Supprimer une carte RFID (cascade recharges)
+ * DELETE /api/cards/:uid
+ */
+exports.deleteCard = async (req, res, next) => {
+  try {
+    const { uid } = req.params;
+
+    const card = await prisma.card.findUnique({
+      where: { uid },
+      include: { user: true }
+    });
+
+    if (!card) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Carte introuvable'
+      });
+    }
+
+    await prisma.card.delete({ where: { uid } });
+
+    return res.json({
+      status: 'success',
+      message: `Carte ${uid} supprimée avec succès`
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Obtenir la liste de tous les utilisateurs (Admin)
- * GET /api/users
+ * GET /api/admin/users
  */
 exports.getAllUsers = async (req, res, next) => {
   try {
@@ -304,7 +335,7 @@ exports.getTransactions = async (req, res, next) => {
       where: whereClause,
       orderBy: { createdAt: 'desc' },
       include: { tollGate: true },
-      take: 100 // Limite par défaut à 100 transactions récentes
+      take: 100
     });
 
     return res.json({
@@ -342,4 +373,3 @@ exports.getAllRecharges = async (req, res, next) => {
     next(error);
   }
 };
-
