@@ -194,14 +194,6 @@ export default function LandingPage() {
             <span className="text-gradient-gold">100% Connecté</span>
           </h1>
 
-          {/* Sous-titre avec fond glass doux pour une lecture parfaite */}
-          <div className="max-w-3xl mx-auto p-4 rounded-2xl bg-slate-950/60 backdrop-blur-md border border-slate-800/60 shadow-xl">
-            <p className="text-base sm:text-lg md:text-xl text-slate-200 leading-relaxed font-medium">
-              Franchissez les péages d'Ekpé, Houègbo et Diho en moins d'une seconde avec votre badge RFID ESP32.
-              Rechargez votre solde par Mobile Money (MTN MoMo, Moov Money, Celtis) et suivez vos passages en temps réel.
-            </p>
-          </div>
-
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link
