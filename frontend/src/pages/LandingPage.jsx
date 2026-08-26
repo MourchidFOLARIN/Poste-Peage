@@ -159,41 +159,34 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       <section className="relative min-h-screen flex items-center justify-center px-4 pt-28 pb-20 overflow-hidden">
 
-        {/* Image en arrière-plan plein écran avec overlays dégradés */}
+        {/* Image en arrière-plan plein écran bien visible */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img
             src="https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg"
             alt="Poste de Péage du Bénin"
-            className="w-full h-full object-cover object-center filter brightness-[0.45] contrast-125 scale-105 transition-transform duration-1000"
+            className="w-full h-full object-cover object-center scale-100"
           />
 
-          {/* Dégradés sombres multi-couches pour lisibilité parfaite */}
-          <div className="absolute inset-0 bg-slate-950/70 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-transparent to-slate-950/85" />
+          {/* Filtres légers pour faire ressortir l'image tout en garantissant la lisibilité */}
+          <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/75" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/60" />
 
-          {/* Halos néons subtils */}
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-cyan-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 left-1/3 w-[450px] h-[250px] bg-purple-600/15 rounded-full blur-3xl" />
-
-          {/* Grille tech subtile */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: 'linear-gradient(rgba(6,182,212,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.8) 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
-          }} />
+          {/* Halos lumineux subtils */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-cyan-500/20 rounded-full blur-3xl" />
         </div>
 
-        {/* Contenu textuel superposé sur l'image */}
+        {/* Contenu textuel superposé sur l'image avec ombrages nets */}
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
 
           {/* Badge d'annonce */}
-          <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-slate-900/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-bold shadow-xl shadow-cyan-500/10">
+          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-cyan-400/40 text-cyan-300 text-xs sm:text-sm font-bold shadow-2xl">
             <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
             Réseau National des Péages Électroniques — Bénin 🇧🇯
           </div>
 
-          {/* Titre principal massif */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] text-white">
+          {/* Titre principal massif avec ombre portée pour contraster sur l'image */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.9)]">
             Le Péage{' '}
             <span className="text-gradient-cyan">Sans Contact</span>
             <br />
@@ -201,17 +194,19 @@ export default function LandingPage() {
             <span className="text-gradient-gold">100% Connecté</span>
           </h1>
 
-          {/* Sous-titre */}
-          <p className="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium">
-            Franchissez les péages d'Ekpé, Houègbo et Diho en moins d'une seconde avec votre badge RFID ESP32.
-            Rechargez votre solde par Mobile Money (MTN MoMo, Moov Money, Celtis) et suivez vos passages en temps réel.
-          </p>
+          {/* Sous-titre avec fond glass doux pour une lecture parfaite */}
+          <div className="max-w-3xl mx-auto p-4 rounded-2xl bg-slate-950/60 backdrop-blur-md border border-slate-800/60 shadow-xl">
+            <p className="text-base sm:text-lg md:text-xl text-slate-200 leading-relaxed font-medium">
+              Franchissez les péages d'Ekpé, Houègbo et Diho en moins d'une seconde avec votre badge RFID ESP32.
+              Rechargez votre solde par Mobile Money (MTN MoMo, Moov Money, Celtis) et suivez vos passages en temps réel.
+            </p>
+          </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link
               to="/login"
-              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/25 transition-all transform hover:scale-[1.03]"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/30 transition-all transform hover:scale-[1.03]"
             >
               <Zap className="w-5 h-5 fill-current" />
               Accéder à mon Compte
