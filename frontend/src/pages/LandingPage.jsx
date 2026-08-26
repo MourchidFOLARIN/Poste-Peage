@@ -159,21 +159,15 @@ export default function LandingPage() {
       {/* ════════════════════════════════ */}
       <section className="relative min-h-screen flex items-center justify-center px-4 pt-28 pb-20 overflow-hidden">
 
-        {/* Image en arrière-plan plein écran bien visible */}
+        {/* Image en arrière-plan plein écran 100% nette et lumineuse */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img
             src="https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg"
             alt="Poste de Péage du Bénin"
-            className="w-full h-full object-cover object-center scale-100"
+            className="w-full h-full object-cover object-center"
           />
-
-          {/* Filtres légers pour faire ressortir l'image tout en garantissant la lisibilité */}
-          <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-[1px]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/75" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/60" />
-
-          {/* Halos lumineux subtils */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-cyan-500/20 rounded-full blur-3xl" />
+          {/* Fondu discret uniquement tout en bas pour la transition avec la section suivante */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent" />
         </div>
 
         {/* Contenu textuel superposé sur l'image avec ombrages nets */}
