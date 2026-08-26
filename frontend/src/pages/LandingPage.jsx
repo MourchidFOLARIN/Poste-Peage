@@ -6,7 +6,6 @@ import {
   ChevronRight, Star, Globe, Activity, Users, Coins,
   Menu, X, MapPin, Navigation, Compass, Sparkles
 } from 'lucide-react';
-import BeninMap from '../components/BeninMap';
 
 // Compteur animé
 function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
@@ -39,90 +38,6 @@ export default function LandingPage() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Postes de péage réels au Bénin (SIRAT Bénin)
-  const tollStations = [
-    {
-      id: 'ekpe',
-      name: "Poste de Péage d'Ekpé",
-      location: 'Route Cotonou - Sèmè Kpodji - Porto-Novo (RNIE 1)',
-      badge: 'Flux Élevé · 24/7',
-      status: 'Opérationnel',
-      image: 'https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg',
-      lanes: '6 Voies Automatiques',
-      tech: 'ESP32 + Lecteur RFID UHF'
-    },
-    {
-      id: 'houegbo',
-      name: 'Poste de Péage de Houègbo',
-      location: 'RNIE 2 (Cotonou - Allada - Bohicon)',
-      badge: 'Voies Rapides Ouvertes',
-      status: 'Opérationnel',
-      image: 'https://www.kaweru.com/wp-content/uploads/2025/12/Peage-480x270.jpg',
-      lanes: '4 Voies mixtes & Rapides',
-      tech: 'Barrières Servomoteurs IoT'
-    },
-    {
-      id: 'grandpopo',
-      name: "Poste de Péage d'Ahoho (Grand-Popo)",
-      location: 'RNIE 1 (Cotonou - Comè - Togo)',
-      badge: 'Transfrontalier · Togo',
-      status: 'Opérationnel',
-      image: 'https://lanouvelletribune.info/wp-content/uploads/2023/03/poste-peage.webp',
-      lanes: '4 Voies Transfrontalières',
-      tech: 'Caméras LPR & RFID FastLane'
-    },
-    {
-      id: 'diho',
-      name: 'Poste de Péage de Diho',
-      location: 'RNIE 2 (Axe Dassa - Savè)',
-      badge: 'Fret Inter-États',
-      status: 'Opérationnel',
-      image: 'https://globalarchiconsult.com/upload/images/projects/0633589001642937881.png',
-      lanes: '4 Voies Poids Lourds',
-      tech: 'Balance Pésage & ESP32'
-    },
-    {
-      id: 'parakou',
-      name: 'Poste de Péage de Sirarou (Parakou)',
-      location: 'RNIE 2 (Axe Parakou - N\'Dali)',
-      badge: 'Hub Grand Nord',
-      status: 'Connecté ESP32',
-      image: 'https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg',
-      lanes: '4 Voies Automatisées',
-      tech: 'Solaire & WebSockets IoT'
-    },
-    {
-      id: 'bembereke',
-      name: 'Poste de Péage de Bembèrèkè',
-      location: 'RNIE 2 (Corridor Parakou - Niger)',
-      badge: 'Transit Niger & Sahel',
-      status: 'Opérationnel',
-      image: 'https://www.kaweru.com/wp-content/uploads/2025/12/Peage-480x270.jpg',
-      lanes: '4 Voies Poids Lourds',
-      tech: 'Puces RFID UHF Longue Portée'
-    },
-    {
-      id: 'kpomasse',
-      name: 'Poste de Péage de Kpomassè',
-      location: 'Route des Pêches (Pahou - Ouidah)',
-      badge: 'Express Littoral',
-      status: 'Nouvelle Génération',
-      image: 'https://lanouvelletribune.info/wp-content/uploads/2023/03/poste-peage.webp',
-      lanes: '4 Voies Express',
-      tech: 'Paiement Sans Contact NFC'
-    },
-    {
-      id: 'djougou',
-      name: 'Poste de Péage de Djougou',
-      location: 'RNIE 3 (Axe Djougou - Natitingou)',
-      badge: 'Axe Ouest Togo',
-      status: 'Opérationnel',
-      image: 'https://globalarchiconsult.com/upload/images/projects/0633589001642937881.png',
-      lanes: '4 Voies Régionales',
-      tech: 'Détecteurs d\'essieux ESP32'
-    }
-  ];
 
   const features = [
     {
@@ -202,7 +117,6 @@ export default function LandingPage() {
 
           {/* Nav Desktop */}
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300">
-            <a href="#reseau-peage" className="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><MapPin className="w-4 h-4 text-cyan-400" /> Postes du Bénin</a>
             <a href="#fonctionnalites" className="hover:text-white transition-colors">Fonctionnalités</a>
             <a href="#comment-ca-marche" className="hover:text-white transition-colors">Comment ça marche</a>
             <a href="#statistiques" className="hover:text-white transition-colors">Performances</a>
@@ -233,7 +147,6 @@ export default function LandingPage() {
         {/* Menu Mobile */}
         {menuOpen && (
           <div className="md:hidden bg-slate-900 border-b border-slate-800 p-4 space-y-3">
-            <a href="#reseau-peage" onClick={() => setMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white text-sm font-semibold transition-colors">Postes du Bénin</a>
             <a href="#fonctionnalites" onClick={() => setMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white text-sm font-semibold transition-colors">Fonctionnalités</a>
             <a href="#comment-ca-marche" onClick={() => setMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white text-sm font-semibold transition-colors">Comment ça marche</a>
             <Link to="/login" className="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm">Commencer maintenant</Link>
@@ -242,111 +155,91 @@ export default function LandingPage() {
       </nav>
 
       {/* ════════════════════════════════ */}
-      {/* HERO SECTION                     */}
+      {/* HERO SECTION AVEC IMAGE EN FOND  */}
       {/* ════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-16 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center px-4 pt-28 pb-20 overflow-hidden">
 
-        {/* Arrière-plan lumineux animé */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/6 w-96 h-96 bg-cyan-500/12 rounded-full blur-3xl animate-pulse-glow" />
-          <div className="absolute top-1/3 right-1/6 w-80 h-80 bg-purple-500/12 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '3s' }} />
+        {/* Image en arrière-plan plein écran avec overlays dégradés */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <img
+            src="https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg"
+            alt="Poste de Péage du Bénin"
+            className="w-full h-full object-cover object-center filter brightness-[0.45] contrast-125 scale-105 transition-transform duration-1000"
+          />
 
-          {/* Grille de fond subtile */}
+          {/* Dégradés sombres multi-couches pour lisibilité parfaite */}
+          <div className="absolute inset-0 bg-slate-950/70 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-transparent to-slate-950/85" />
+
+          {/* Halos néons subtils */}
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-cyan-500/15 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 left-1/3 w-[450px] h-[250px] bg-purple-600/15 rounded-full blur-3xl" />
+
+          {/* Grille tech subtile */}
           <div className="absolute inset-0 opacity-[0.03]" style={{
             backgroundImage: 'linear-gradient(rgba(6,182,212,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.8) 1px, transparent 1px)',
             backgroundSize: '60px 60px'
           }} />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        {/* Contenu textuel superposé sur l'image */}
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
 
-          {/* COLONNE GAUCHE : Titres, CTA & Preuves */}
-          <div className="lg:col-span-7 text-center lg:text-left space-y-8">
-
-            {/* Badge d'annonce */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 text-sm font-bold shadow-lg shadow-cyan-500/10">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-              Réseau National des Péages Électroniques — Bénin 🇧🇯
-            </div>
-
-            {/* Titre principal massif */}
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
-              Le Péage{' '}
-              <span className="text-gradient-cyan">Sans Contact</span>
-              <br />
-              <span className="text-slate-300">du Bénin,</span>{' '}
-              <span className="text-gradient-gold">100% Connecté</span>
-            </h1>
-
-            {/* Sous-titre */}
-            <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
-              Franchissez les péages d'Ekpé, Houègbo et Diho en moins d'une seconde avec votre badge RFID ESP32.
-              Rechargez votre solde par Mobile Money et suivez vos passages en temps réel.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <Link
-                to="/login"
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/25 transition-all transform hover:scale-[1.03]"
-              >
-                <Zap className="w-5 h-5 fill-current" />
-                Acceder a mon Compte
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-
-              <Link
-                to="/admin/login"
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-bold text-base border border-slate-700 transition-all"
-              >
-                <Cpu className="w-5 h-5 text-purple-400" />
-                Accès Portail Admin
-              </Link>
-            </div>
-
-            {/* Preuves sociales */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4 text-xs text-slate-400 font-semibold">
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-emerald-400" /> Recharges MTN MoMo & Moov</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-cyan-400" /> Franchissement 200ms</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-purple-400" /> PostgreSQL & WebSockets</span>
-            </div>
+          {/* Badge d'annonce */}
+          <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-slate-900/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-bold shadow-xl shadow-cyan-500/10">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
+            Réseau National des Péages Électroniques — Bénin 🇧🇯
           </div>
 
-          {/* COLONNE DROITE : Image principale du Péage d'Ekpé (Cotonou) */}
-          <div className="lg:col-span-5 relative group">
-            {/* Effet halo néon de fond */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 rounded-3xl blur-2xl opacity-60 group-hover:opacity-90 transition duration-700" />
+          {/* Titre principal massif */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] text-white">
+            Le Péage{' '}
+            <span className="text-gradient-cyan">Sans Contact</span>
+            <br />
+            du Bénin,{' '}
+            <span className="text-gradient-gold">100% Connecté</span>
+          </h1>
 
-            {/* Carte conteneur d'image principale */}
-            <div className="relative rounded-3xl overflow-hidden border border-cyan-500/40 shadow-2xl bg-slate-900/90 backdrop-blur-xl p-3">
-              <img
-                src="https://beninwebtv.bj/wp-content/uploads/2023/07/poste-de-peage-de-Ekpe.jpg"
-                alt="Poste de Péage d'Ekpé Cotonou - Bénin"
-                className="w-full h-[420px] sm:h-[480px] object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
+          {/* Sous-titre */}
+          <p className="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium">
+            Franchissez les péages d'Ekpé, Houègbo et Diho en moins d'une seconde avec votre badge RFID ESP32.
+            Rechargez votre solde par Mobile Money (MTN MoMo, Moov Money, Celtis) et suivez vos passages en temps réel.
+          </p>
 
-              {/* Tag Localisation en haut à gauche */}
-              <div className="absolute top-6 left-6 px-3.5 py-1.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 text-xs font-bold flex items-center gap-2 shadow-lg">
-                <MapPin className="w-4 h-4 text-cyan-400 animate-bounce" />
-                Poste de Péage d'Ekpé (Cotonou)
-              </div>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <Link
+              to="/login"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-cyan-500/25 transition-all transform hover:scale-[1.03]"
+            >
+              <Zap className="w-5 h-5 fill-current" />
+              Accéder à mon Compte
+              <ArrowRight className="w-5 h-5" />
+            </Link>
 
-              {/* Overlay d'information en bas */}
-              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 shadow-2xl flex items-center justify-between">
-                <div>
-                  <span className="block text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest">
-                    BORNE INTELLIGENTE ESP32
-                  </span>
-                  <span className="text-sm font-black text-white">
-                    Système Automatisé en Service
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-black">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  ACTIF
-                </div>
-              </div>
+            <Link
+              to="/admin/login"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-bold text-base border border-slate-700/80 backdrop-blur-md transition-all hover:border-cyan-500/40"
+            >
+              <Cpu className="w-5 h-5 text-purple-400" />
+              Portail Administrateur
+            </Link>
+          </div>
+
+          {/* Preuves & Badges en cartes glassmorphism */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 pt-6 text-xs sm:text-sm text-slate-300 font-semibold">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/70 backdrop-blur-md border border-slate-800/90 shadow-lg">
+              <CheckCircle className="w-4 h-4 text-emerald-400" />
+              <span>Recharges MTN MoMo & Moov</span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/70 backdrop-blur-md border border-slate-800/90 shadow-lg">
+              <Zap className="w-4 h-4 text-cyan-400" />
+              <span>Franchissement 200ms</span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/70 backdrop-blur-md border border-slate-800/90 shadow-lg">
+              <Shield className="w-4 h-4 text-purple-400" />
+              <span>Bornes ESP32 & WebSockets</span>
             </div>
           </div>
 
@@ -373,13 +266,6 @@ export default function LandingPage() {
             );
           })}
         </div>
-      </section>
-
-      {/* ═════════════════════════════════════════════════════════ */}
-      {/* SECTION : CARTE INTERACTIVE DU RÉSEAU BÉNIN              */}
-      {/* ═════════════════════════════════════════════════════════ */}
-      <section id="reseau-peage" className="bg-slate-950">
-        <BeninMap />
       </section>
 
       {/* ════════════════════════════════ */}
